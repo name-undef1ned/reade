@@ -1,0 +1,38 @@
+
+// css模块化引入  css模块化引入必须加上分号
+@import './reset.scss';
+
+// 声明一个scss变量
+// 假定屏幕为37.5，随着设计稿项目要求随意调整
+$Basefontsize:375 / 10;
+
+// 定义scss函数 在任何需要值的地方或sass script中使用
+//  编码过程中不想使用rem 想使用px-因为px有宽高概念 ---那势必需要知道元素设定的px值等于多少当前窗口大小下的rem值（比例），这里就是假定
+// 为375屏幕的rem 求一个比例。 
+// 此表达式指定px和rem的比例关系，得出一个固定比例值，虽然固定的但是因为html.fontsize即rem值 还是动态变化的 所以就会在不同的
+// 屏幕宽度-html.fontsize即rem值下去运用这个固定的比例值。
+// 这里就是通过一个假定375屏幕情况下得出项目的px和rem的比例关系--得出项目要求的px/rem比例关系的rem比例值在不同情况下应用这个比例值
+// 比如元素a宽度为37.5px 经过计算就是1rem---rem动态响应HTML.fontsize---HTML.fontsize动态响应用户屏幕，
+// 比如元素b宽度为75px 经过计算就是2rem---rem动态响应HTML.fontsize---HTML.fontsize动态响应用户屏幕，就达到了响应式布局.
+
+@function px2rem($px){
+@return ($px / $Basefontsize) + rem;
+}
+
+// 混入指令 使用include引入该指令
+@mixin center(){
+    display: flex;
+    // 主轴侧轴都设为居中对齐
+    justify-content: center;
+    align-items: center;
+}
+
+body{
+    color:red;
+}
+
+
+@mixin Setfontfamily{
+     font-family: 'Oooh Baby', cursive; 
+    // font-family: 'Ubuntu Mono', monospace;
+}
