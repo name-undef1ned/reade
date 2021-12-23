@@ -1,24 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+// 导入book模块
+import book from './modules/book'
+
 // 初始化store之前就必须注册，因为import提升的原因无法灵活控制执行顺序，所以将注册逻辑写在store文件中
 Vue.use(Vuex)
 
 // 使用vuex构造函数的Store函数生成store实例
  const store =new Vuex.Store({
-
-    mutations:{
-
-    },
-    actions:{
-
-    },
-    getters:{
-
-    },
-    state:{
-
-    }
+ modules:{
+    book,
+ }
+   
  })
 export default store
 

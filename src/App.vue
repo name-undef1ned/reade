@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <span class="icon-cart"></span>
-    <span class="icon-clock"></span>
-    <span id="s3">this is some word in app.vue</span>
-    <router-link :to="{name:'helloword'}">click me to show helloword</router-link>
+   
     <router-view></router-view>
   </div>
 </template>
@@ -11,6 +8,11 @@
 <script>
 
 export default {
+ data() {
+   return {
+ 
+   }
+ },
   name: 'App',
   components: {
    
@@ -33,12 +35,19 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 <style lang="scss">
 @import './assets/styles/global.scss';
-
+ #app{
+   width: 100%;
+   height: 100%;
+   overflow: hidden;
+ }
 span{
 @include Setfontfamily;
 }
 #s3{
   font-size:px2rem(20)
 }
+
+
+ 
 
 </style>

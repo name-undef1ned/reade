@@ -1,10 +1,14 @@
 
+// 引入sass的math 必须头部引入
+@use "sass:math";
+
+
 // css模块化引入  css模块化引入必须加上分号
 @import './reset.scss';
 
 // 声明一个scss变量
 // 假定屏幕为37.5，随着设计稿项目要求随意调整
-$Basefontsize:375 / 10;
+$Basefontsize:37.5;
 
 // 定义scss函数 在任何需要值的地方或sass script中使用
 //  编码过程中不想使用rem 想使用px-因为px有宽高概念 ---那势必需要知道元素设定的px值等于多少当前窗口大小下的rem值（比例），这里就是假定
@@ -16,7 +20,7 @@ $Basefontsize:375 / 10;
 // 比如元素b宽度为75px 经过计算就是2rem---rem动态响应HTML.fontsize---HTML.fontsize动态响应用户屏幕，就达到了响应式布局.
 
 @function px2rem($px){
-@return ($px / $Basefontsize) + rem;
+@return math.div($px,$Basefontsize) + rem;
 }
 
 // 混入指令 使用include引入该指令
@@ -27,12 +31,16 @@ $Basefontsize:375 / 10;
     align-items: center;
 }
 
-body{
-    color:red;
-}
-
 
 @mixin Setfontfamily{
      font-family: 'Oooh Baby', cursive; 
     // font-family: 'Ubuntu Mono', monospace;
+}
+
+// :before伪类选择器 可以使用content指定内容，在这里的意义是ico.css使用这个选择器指定图标文本样式，这里也使用覆盖掉 不然样式会被ico.css覆盖
+.ico:before{
+font-size: px2rem(20);
+color: #333;
+margin-bottom: 10px;
+
 }
