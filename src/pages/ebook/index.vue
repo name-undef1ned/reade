@@ -1,5 +1,7 @@
 <template>
   <div>
+
+   
     <transition name="title">
       <Booktitle v-show="$store.state.book.isTitleAndMenuShow"></Booktitle>
      </transition>
@@ -10,7 +12,7 @@
 
     <transition name="menu">
     <Bookmenu v-show="$store.state.book.isTitleAndMenuShow"></Bookmenu>
-    </transition>
+    </transition> 
   </div>
 </template>
 <script>
@@ -23,7 +25,8 @@ export default {
   components:{
     Bookreader,
     Booktitle,
-    Bookmenu
+    Bookmenu,
+    
   },
   data() {
     return {
@@ -32,44 +35,24 @@ export default {
   },
   mounted() {
      console.log(this.$store);
+     if(this. is_weixin()){
+       alert('由于微信内置浏览器的安全政策，该项目不兼容微信端，请到其他浏览器查看!')
+     }
   },
   methods:{
-  
+  is_weixin(){
+      var ua = navigator.userAgent.toLowerCase();
+      if(ua.match(/MicroMessenger/i)=="micromessenger") {
+           return true;
+     } else {
+            return false;
+      }
+}
   }
 };
 </script>
 
 <style lang="scss" scoped>
 @import '../../assets/styles/global.scss';
-
-// title组件
-// 组件渲染时-进入时候 的起点位置
- .title-enter,.title-leave-to{
-  transform: translate3d(0,-100%,0);
- }
-//  离开起点后的状态和元素最终状态 。但是元素最终状态会被元素本身的样式类覆盖
- .title-enter-to,.title-leave{
-  transform: translate3d(0,0,0);
- }
-//  整个过程
- .title-enter-active,.title-leave-active{
-  transition:all .3s linear;
- }
-
-// menu组件
- .menu-enter,.menu-leave-to{
-   transform: translate3d(0,100%,0);
-   }
-//  离开起点后的状态和元素最终状态 。但是元素最终状态会被元素本身的样式类覆盖
- .menu-enter-to,.menu-leave{
-   transform: translate3d(0,0,0);
- }
-//  整个过程
- .menu-enter-active,.menu-leave-active{
-  transition:all .3s linear;
- }
-
-
-
 
 </style>

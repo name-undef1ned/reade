@@ -12,7 +12,6 @@ import './assets/styles/ico.css'
 // 引入公共样式文件
 import './assets/styles/global.scss'
 // 引入字体样式文件 
-import './assets/styles/fonts-OoohBaby.css'
 
 // css样式还是需要全部引入
 import 'element-ui/lib/theme-chalk/index.css'
@@ -27,6 +26,7 @@ import App from './App.vue'
 Vue.config.productionTip = false
 
 new Vue({
+ 
   store,
   router,
   render: h => h(App),

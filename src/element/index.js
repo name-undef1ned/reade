@@ -1,11 +1,12 @@
 
 import Vue from 'vue'
-import {Slider} from 'element-ui' 
+import {Slider } from 'element-ui' 
  
 
 const element = {
     install: function (Vue) {
         Vue.use(Slider)
+      
    
     }
   }

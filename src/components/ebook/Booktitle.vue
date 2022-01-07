@@ -1,5 +1,5 @@
 <template>
-  <div class="title-wraper">
+  <div class="title-wraper" >
       <!-- left right div为一级flex，right为二级flex 所以这样搭建结构 -->
       <div class="left"> 
          <span class="icon-back"></span>
@@ -26,6 +26,9 @@ name:'Booktitle'
 
 <style lang="scss" scoped>
 @import '../../assets/styles/global.scss';
+//  .themezhuqingimage{
+//       background-image: url("../../assets/img/p243944566.jpg") !important;
+//   }
 .title-wraper{
     // 任何屏幕情况下宽度都是100%，但是高度自适应
     width:100%;
@@ -36,7 +39,6 @@ name:'Booktitle'
     left: 0;
     top: 0;
     z-index: 10;
-
     // 使用flex布局排列左边的1个ico的div和右边三个ico的div
     display: flex;
     
@@ -83,8 +85,8 @@ name:'Booktitle'
     }
     
     // 修饰样式 不重要
-    background-color: white;
     /* x偏移量 | y偏移量 | 阴影模糊半径 | 阴影扩散半径 | 阴影颜色 */
     box-shadow:0 px2rem(1) px2rem(5) px2rem(5) rgba(0,0,0,10%);
+    background: white;
 }
 </style>
