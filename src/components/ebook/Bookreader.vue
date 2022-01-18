@@ -1,17 +1,23 @@
 <template>
   <div id="read" ref="read">
     <div id="read1" wraper="_"></div>
-    <span v-if="isshowwindowchangetip" class="span1"
-      >检测到窗口变化,正在重新加载图书...</span
-    >
+    <loading v-if="isshowwindowchangetip" 
+    :right="'0'" 
+    :top="'10%'" 
+    :color="'green'" 
+    :backgroundColor="'rgba(135, 206, 235, 100%)'"
+    :message="'检测到窗口变化,正在重新加载图书...'">
+    </loading>
   </div>
 </template>
 
 <script>
 import Epub from "epubjs";
 import mixin from '../../utils/mixin'
-import {setfontfamily,getfontfamily,getfontsize,setfontsize,gettheme,settheme} from '../../utils/localstorage'
-
+import {mapState,mapMutations} from 'vuex'
+import {setfontfamily,getfontfamily,getfontsize,setfontsize,gettheme,settheme,getlocationcfi} from '../../utils/localstorage'
+// 引入通知组件
+import loading from '../../components/ebook/Notice/loading.vue'
   // console.log(process.env.VUE_APP_PREVIEW,process.env.NODE_ENV,process);
 
 // 挂载到顶层对象，通过es6的关键字global就可以访问当前顶层对象，此处通过global关键字挂载到顶层对象。epub需要挂载到
@@ -20,6 +26,9 @@ global.epub = Epub;
 const vm = {
   name: "Bookreader",
   mixins:[mixin],
+  components:{
+    loading
+  },
   data() {
     return {
       nginxBaseUrl: "http://192.168.3.70:8081/",
@@ -27,13 +36,14 @@ const vm = {
       book: {},
       cursorefn: {},
       isshowwindowchangetip: false,
+      hasdisplay:false
     };
   },
   computed: {
-  
+  ...mapState('book',['value1'])
   },
   methods: {
-   
+   ...mapMutations('book',['SETCOVERURL','SETBOOKMETADATA']),
     // 主题功能-注册
     registerTheme() {
       this.themeslist.forEach((ele) => {
@@ -61,12 +71,7 @@ const vm = {
       }
      
     },
-    jumpto(href) {
-      this.rendition.display(href);
-            this.setistitleandmenushow();
-
-    },
-    // },  除去初始化的窗口变化-重新渲染  残余bug--再次渲染后阅读进度丢失
+   
     windowchange() {
       let timer;
       let _that = this;
@@ -79,12 +84,16 @@ const vm = {
         // 窗口变化触发提示
         _that.isshowwindowchangetip = true;
         timer = setTimeout(function () {
-         
-
-          _that.initrendition().then((res) => {
-            //  从新渲染结束 关闭提示
-            _that.isshowwindowchangetip = false;
-          });
+        //  调用resize方法
+        let parentwidth=document.querySelector('#read').clientWidth;
+        let parentheight=document.querySelector('#read').clientHeight;
+    
+        _that.rendition.resize(`${parentwidth}`,`${parentheight}`);
+             //   //  从新渲染结束 关闭提示
+            setTimeout(() => {
+              _that.isshowwindowchangetip = false;
+              
+            }, 1100);
         }, 1000);
       });
     },
@@ -139,6 +148,18 @@ const vm = {
            }
 
     },
+    // 获取图书的基本元数据（出版社作者..）以及封面url方法
+    parsebook(){
+      this.book.loaded.cover.then(cover=>{
+        this.book.archive.createUrl(cover).then(url=>{
+          this.SETCOVERURL(url);
+        })
+      })
+      this.book.loaded.metadata.then(metadata=>{
+        this.SETBOOKMETADATA(metadata)
+        
+      })
+    },
     initbook() {
     
       // epubjs解析函数
@@ -154,20 +175,30 @@ const vm = {
       });
     },
     initrendition() {
+      // resize方法覆盖原有逻辑
       // 每次窗口变化重新渲染功能-执行之前先销毁以前的
       // document.querySelector('#read1').remove();
-      let newread = document.createElement("div");
-      newread.id = "read1";
-      newread.setAttribute("wraper", "_");
-      read.appendChild(newread);
+      // let newread = document.createElement("div");
+      // newread.id = "read1";
+      // newread.classList+='wh'
+      // newread.style.width='100%';
+      // newread.style.height='100%';
+      // newread.setAttribute("wraper", "_");
+      // read.appendChild(newread);
 
-      let readarr = document.querySelectorAll("div[wraper]");
-      readarr[0].remove();
+      // let readarr = document.querySelectorAll("div[wraper]");
+      // readarr[0].remove();
 
       // 3开始渲染 book的renderto方法生成显然对象rendition  并配置翻页动画字段
-      this.rendition = this.book.renderTo("read1", {
+      //  选择屏幕宽度常量 如使用innerwidth页面可视区域edge firfox会有问题-一开始的值很大大到会双页显示.能否挑出这两个浏览器编程正常的节点赋值？
+        const screenwidth=screen.width;
+        // 谷歌内核即chorme safiry的横屏screenwidth属性不会变化，edge firefox内核对于innerwidth初始化值过大
+        // 故而采用兼容性好一点的vw-但是又会影响到章节组件高度
+        // 最终思路 width只接受number 所以采用动态获取父元素的宽度并赋值 图书渲染页面都没有问题了
+        const parentwidth=this.$refs.read.clientWidth;
+         this.rendition = this.book.renderTo("read1", {
         // 指定宽高
-        width: innerWidth,
+        width:parentwidth,
         height: innerHeight,
         // 微信safiry兼容 height写错了导致safiry渲染不出...
         method: "default",
@@ -176,37 +207,56 @@ const vm = {
         flow: "paginated",
         manager: "continuous",
         snap: true,
+     
       });
+      // 将rendition存入vuex
       this.setrendition( this.rendition)
+      // 将book存入vuex
+      this.$store.commit('book/SETBOOK',this.book)
       // 4显示&目录舔砖 调用reandy钩子 如果book生成就返回正确promise
       this.book.ready
         .then(() => {
           let _that=this;
           // 重新渲染完毕 关闭提示
-          this.isshowwindowchangetip = false;
-          this.rendition.display().then(function(){
+          // this.isshowwindowchangetip = false;
+          if(getlocationcfi(this.filename)){
+            this.rendition.display(getlocationcfi(this.filename)).then(function(){
+   _that.initfontfamily();
+            _that.initfontsize();
+           
+          })
+          }else{
+             this.rendition.display().then(function(){
            
             _that.initfontfamily();
             _that.initfontsize();
            
           })
+          }
+          
+         
         
           //  拿到导航对象 传递给vuex
           this.navigation = this.book.navigation;
           this.setnavigation(this.book.navigation)
-          // 生成目录信息 但是很慢
-          return this.book.locations.generate();
+             // 生成书籍的位置数据 但是很慢   简单的分页逻辑 根据字体大小窗口大小决定一页显示多少字数 有多少页,生成的进度数组每一页都有一个cfi
+          return this.book.locations.generate(750 * (window.innerWidth/375)*(getfontsize(this.filename)/16));
         })
         .then((res) => {
-          this.setisbookprogressready();
-          this.locations = this.book.locations;
-          let ClosureFn = function (newv) {
-            this.progresschange(newv);
-          };
-          // watch回到若想访问到generate()生成的目录res 就必须把回到定义在外部。形成闭包 通过保存的作用域链才能访问到
-          this.$watch(function () {
-            return this.pgspercent;
-          }, ClosureFn);
+          if(getlocationcfi(this.filename)){
+            this.rendition.display(getlocationcfi(this.filename)).then(()=>{
+          
+              // 更新section 更新进度条
+              this.setnowsection();
+            })
+          }
+        // 位置数据生成后将章节信息当前章节等共享数据存储在vuex 进度条才可用
+        this.setisbookprogressready();
+        this.SETBOOKSECTIONS(this.book.navigation.get())
+        // 初始化存储当前章节信息
+        this.SETNOWSECTION(this.book.navigation.get()[this.section])
+        // this.setnowsection()
+       
         });
 
 
@@ -236,7 +286,8 @@ const vm = {
         });
       }
 
-
+      // 测试resize事件
+      // this.rendition.resize('100','100')
     // 注册字体样式 样式表
     this.rendition.hooks.content.register(contents=>{
       // 只能是url路径 不可以是地址
@@ -303,12 +354,12 @@ const vm = {
 
     },
     // 设置进度方法
-    progresschange(progress) {
-      const percentage = progress / 100;
-      const location =
-        percentage > 0 ? this.locations.cfiFromPercentage(percentage) : 0;
-      this.rendition.display(location);
-    },
+    // progresschange(progress) {
+    //   const percentage = progress / 100;
+    //   const location =
+    //     percentage > 0 ? this.locations.cfiFromPercentage(percentage) : 0;
+    //   this.rendition.display(location);
+    // },
   },
 
   beforeMount() {},
@@ -325,8 +376,9 @@ const vm = {
       this.initrendition();
        //  样式背景色功能-注册函数调用
       this.registerTheme();
+      this.parsebook();
     });
-
+    
     // 字体大小功能监听兄弟组件设置的fontsize变化做出对应字号设置
     this.$watch(
       function () {
@@ -362,12 +414,7 @@ const vm = {
       }
     );
 
-    // 监听vuex的目录数据变化
-    this.$watch(function(){
-      return this.capturehref
-    },function(newv){
-      this.jumpto(newv)
-    })
+    
 
     this.windowchange();
 
@@ -383,12 +430,24 @@ export default vm;
 
 <style lang="scss" scoped>
 @import "../../assets/styles/global.scss";
+
 #read1 {
   position: relative;
+ 
+}
+.bookwraper{
+  width: 100%;
+  height: 100%
 }
 #read {
-  @include center;
+
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  // @include center;
 }
+
+
 .span1 {
   width: px2rem(280);
   // height: px2rem(50);
@@ -406,5 +465,6 @@ export default vm;
   box-shadow: px2rem(0) px2rem(0) px2rem(6) px2rem(0) rgba(0, 0, 0, 10%);
   border-radius: 5px;
   font-family: "Ubuntu Mono", monospace;
+  // background: rgba(135, 206, 235, 10%);
 }
 </style>

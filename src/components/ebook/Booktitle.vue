@@ -2,17 +2,17 @@
   <div class="title-wraper" >
       <!-- left right div为一级flex，right为二级flex 所以这样搭建结构 -->
       <div class="left"> 
-         <span class="icon-back"></span>
+         <span class="icon-back iconfont"></span>
       </div>
       <div class="right">
          <div class="icon-wraper">
-             <span class="icon-cart ico"></span>
+             <span class="icon-cart iconfont ico"></span>
          </div>
          <div class="icon-wraper">
-             <span class="icon-person ico"></span>
+             <span class="icon-person iconfont ico"></span>
          </div>
          <div class="icon-wraper">
-             <span class="icon-moreandroid ico"></span>
+             <span class="icon-moreandroid iconfont ico"></span>
          </div>
       </div>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="family-wraper">
    <div class="family-title">
-     <span class="icon-down" @click="hidefontFamily"></span>
+     <span class="icon-down iconfont" @click="hidefontFamily"></span>
      字体设置
    </div>
 
@@ -14,7 +14,7 @@
      :class="{selectcurrent:$store.state.book.fontfamilyselected==item}"
      >
             <span>{{item+$store.state.book.fontfamilylistlang[index]}}
-            </span><span class="icon-check" v-if="$store.state.book.fontfamilyselected==item"></span>
+            </span><span class="icon-check iconfont" v-if="$store.state.book.fontfamilyselected==item"></span>
       </li>
     
    </div>

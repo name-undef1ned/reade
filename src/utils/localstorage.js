@@ -64,5 +64,13 @@ return getbookobj(filename,'theme')
 export function settheme(filename,theme){
 return setbookobj(filename,'theme',theme)
 }
+// 获取进度的startcfi值
+export function getlocationcfi(filename){
+return getbookobj(filename,'locationcfi')
+}
+// 存入进度的startcfi值
+export function setlocationcfi(filename,locationcfi){
+return setbookobj(filename,'locationcfi',locationcfi)
+}
 
 

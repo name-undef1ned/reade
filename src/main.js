@@ -8,7 +8,7 @@ import { mapActions,mapGetters,mapMutations,mapState } from 'vuex'
 import router from './router/index'
 
 // 引入iconmoon的图标样式文件
-import './assets/styles/ico.css'
+import './assets/styles/icofont.css'
 // 引入公共样式文件
 import './assets/styles/global.scss'
 // 引入字体样式文件 

@@ -39,12 +39,25 @@ $Basefontsize:37.5;
 // :before伪类选择器 可以使用content指定内容，在这里的意义是ico.css使用这个选择器指定图标文本样式，这里也使用覆盖掉 不然样式会被ico.css覆盖
 .ico:before{
 font-size: px2rem(20);
-color: #333;
+// color: #333;
 margin-bottom: 10px;
 
 }
 
+*{
+              // 移动端tap事件单击高亮问题
+              -webkit-tap-highlight-color:rgba(0,0,0,0);
+              -moz-tap-highlight-color:rgba(0,0,0,0);
+              -o-tap-highlight-color:rgba(0,0,0,0)
+}
 
+// elementui-sibar组件样式调整,写在组件内不出样式 故而写在加载优先的全局样式文件中
+.el-slider__bar{
+  background: skyblue;
+}
+.el-slider__button{
+  border:px2rem(1) solid skyblue;
+}
 
 // 公共样式区域
 // 动态样式 有逻辑的 抽离出一个独立的类名
@@ -56,21 +69,28 @@ margin-bottom: 10px;
     color: #333 !important;
   }
   
+
+  // 过渡动画部分，采用融合的兼容性写法 css3的很多属性都要加上厂商前缀
+  
   // title组件
 // 组件渲染时-进入时候 的起点位置
  .title-enter,.title-leave-to{
   transform: translate3d(0,-100%,0);
-  //  translate:0,-100%,0;
+  -ms-transform:translate3d(0,-100%,0);
  }
 //  离开起点后的状态和元素最终状态 。但是元素最终状态会被元素本身的样式类覆盖
  .title-enter-to,.title-leave{
   transform: translate3d(0,0,0);
-  // translate:0,0,0;
+    -ms-transform:translate3d(0,-100%,0);
  }
 //  整个过程
  .title-enter-active,.title-leave-active{
   // transition:all .3s ease;
   transition:all 0.3s ease;
+  -ms-transition:all 0.3s ease;/*IE*/
+ -moz-transition: all 0.3s ease; /* Firefox 4 */
+ -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
+ -o-transition: all 0.3s ease; /* Opera */
  }
 
 
@@ -85,6 +105,12 @@ margin-bottom: 10px;
 //  整个过程
 .menu-enter-active,.menu-leave-active{
  transition:all .3s ease;
+//  解决ie edge对于transition的卡顿
+-ms-transition:all 0.3s ease;/*IE*/
+-moz-transition: all 0.3s ease; /* Firefox 4 */
+-webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
+-o-transition: all 0.3s ease; /* Opera */
+
 }
 .gonow{
   transition:all 0s ease;
@@ -105,6 +131,11 @@ margin-bottom: 10px;
 //  整个过程
 .fontfamily-enter-active,.fontfamily-leave-active{
  transition:all .3s linear;
+ -ms-transition:all 0.3s ease;/*IE*/
+ -moz-transition: all 0.3s ease; /* Firefox 4 */
+ -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
+ -o-transition: all 0.3s ease; /* Opera */
+
 }
  
 
@@ -120,6 +151,11 @@ margin-bottom: 10px;
 //  整个过程
 .capture-wraper-enter-active,.capture-wraper-leave-active{
  transition:all .3s linear;
+ -ms-transition:all 0.3s ease;/*IE*/
+ -moz-transition: all 0.3s ease; /* Firefox 4 */
+ -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
+ -o-transition: all 0.3s ease; /* Opera */
+
 }
  
 // mask元素的过度动画
@@ -134,5 +170,9 @@ margin-bottom: 10px;
 //  整个过程
 .fade-enter-active,.v-leave-active{
  transition:all .3s linear;
+ -ms-transition:all 0.3s ease;/*IE*/
+ -moz-transition: all 0.3s ease; /* Firefox 4 */
+ -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
+ -o-transition: all 0.3s ease; /* Opera */
 }
  

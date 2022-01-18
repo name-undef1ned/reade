@@ -9,16 +9,20 @@
       ref="menuwraper"
     >
       <div class="icon-wraper" @click="showcapture">
-        <span class="icon-menu ico"></span>
+        <span class="icon-menu iconfont ico"></span>
       </div>
       <div class="icon-wraper" @click="toggleshowprogress">
-        <span class="icon-progress ico"></span>
+        <span class="icon-progress1 iconfont ico"  v-if="isanyshow[2]==false"></span>
+        <span class="icon-jindutiao- iconfont" v-else></span>
       </div>
       <div class="icon-wraper"   @click="toggleshowsettheme">
-        <span class="icon-bright ico"></span>
+        <span class="icon-bright iconfont ico" v-if="isanyshow[1]==false"></span>
+        <span class="icon-sun iconfont ico" v-else></span>
+        
       </div>
       <div class="icon-wraper" @click="toggleshowsetfontsize">
-        <div class="div-a">A</div>
+        <!-- <div class="div-a">A</div> -->
+        <span class="icon-a1 iconfont ico"></span>
       </div>
     </div>
     <!-- 字体设置布局 -->
@@ -31,7 +35,7 @@
       ref="setfontsize"
     >
     <div class="d1">
-       <span class="icon-font_size_minus sizespan1"></span>
+       <span class="icon-font_size_minus sizespan1 iconfont"></span>
       <div class="block">
         <el-slider
           v-model="value2"
@@ -44,11 +48,11 @@
         >
         </el-slider>
       </div>
-      <span class="icon-icon_font_size_plus sizespan2"></span>
+      <span class="icon-icon_font_size_plus sizespan2 iconfont"></span>
 
     </div>
     <div class="d2">
-      <span @click="showFontfamily">{{$store.state.book.fontfamilyselected}}</span><span class="icon-forward"></span>
+      <span @click="showFontfamily">{{$store.state.book.fontfamilyselected}}</span><span class="icon-forward iconfont"></span>
     </div>
      
     </div>
@@ -97,16 +101,16 @@
     <div class="setprogress" v-if="isanyshow[2]" ref="setprogress" :class="{ showclass: isanyshow[2]}">
      <!-- 章节目录提示 -->
       <div class="progresstip-wraper">
-        {{ isbookprogressready === false ? "加载中..." : `${value1}%` }}
+        {{ isbookprogressready === false ? "加载中..." : `${section}${nowsection.label}` }}
       </div>
 
       <!-- 进度条 -->
       <div class="progress-wraper">
-        <!-- leftbutton -->
-        <span class="icon-back"></span>
+        <!-- 上一章-->
+        <span class="icon-back iconfont" @click="presection"></span>
         <div class="block">
           <el-slider
-            v-model="value1"
+            v-model="val"
             @change="touchup"
             v-if="isanyshow[2]"
             :step="1"
@@ -116,7 +120,7 @@
           </el-slider>
         </div>
         <!-- rightbutton -->
-        <span class="icon-forward"></span>
+        <span class="icon-forward iconfont" @click="nextsection"></span>
 
       </div>
 
@@ -128,22 +132,9 @@
     </div>
    </transition>
   
-  <!-- 目录布局 -->
-  <!-- <div class="capture"  :class="{capturepointevent:!isanyshow[3]}"  v-show="isanyshow[3]"> -->
-    <!-- 给这个元素加上v-if子元素动画不正常显示 不加让他一直存在父元素的动画又会出问题。应该是父子元素的渲染规则和vue的过渡动画产生冲突 
-    换成v-show就默认存在 v-enter就不会有问题  可是切换后该元素及其后代一直存在 v-leave的动画又监听不到了  总而言之对一个dom元素的的渲染规则
-    影响了vue过渡类名的监听-动画元素即条件渲染不要设置父元素布局或者其他抢夺元素是否存在的控制权
-     .这个只是起到子元素定位作用 -要不给子元素单独定位 -实现-->
-    <transition name="capture-wraper">
-     <div class="capture-wraper"  ref="captureWraper" v-show="isanyshow[3]">
-      <li v-for="(item,index) in navigation.toc" :key="index" @click="jumpandhide(item.href)">
-        {{index+1}}.{{item.label}}
-      </li>
-     </div>
-    </transition>
-   <transition name="fade">
-       <div class="mask" v-if="isanyshow[3]" ref="mask" @click="hidecapture"></div>
-   </transition>
+  <!-- 目录组件 -->
+
+<captureslibar :isanyshow="isanyshow" @capturehide="capturehide"></captureslibar>
 
   <!-- 字体样式布局 -->
   <transition name="fontfamily">
@@ -158,18 +149,19 @@
 import mixin from '../../utils/mixin'
 import {mapState} from 'vuex'
 import Fontfamily from './bookmenuchildren/Fontfamily.vue'
+import captureslibar from './bookmenuchildren/captureslibar.vue'
 import {getfontsize, setfontsize} from '../../utils/localstorage'
 const vm = {
   name: "Bookmenu",
   mixins:[mixin],
   components:{
-    Fontfamily
+    Fontfamily,
+    captureslibar
   },
   data() {
     return {
       isshowsetfontsize: false,
       value2: 20,
-      value1: 0,
       remint: null,
       // 0为字体设置元素，1为背景设置元素,2为进度条元素,3为目录
       isanyshow: [false, false, false,false],
@@ -181,14 +173,26 @@ const vm = {
     };
   },
   computed: {
-    ...mapState('book',['navigation']),
+    ...mapState('book',['navigation','book','value1']),
     // menubar是否应用阴影的条件
     isallfalse: {
       get() {
         return this.changeisanyshow();
       },
-      set(newv) {},
+      set(newv) {
+  
+      },
+    }, 
+     val: {
+      get() {
+        return this.value1;
+      },
+      set(newv) {
+        console.log(newv);
+        this.SETVALUE1(newv)
+      },
     },
+  
   },
   methods: {
     animatecontrol(){
@@ -215,52 +219,109 @@ const vm = {
       // this.animatecontrol();
       this.changeisanyshow(3);
     },
-    // 控制目录的隐藏
-    hidecapture(){
-        this.changeisanyshow(3,false);
+    // // 控制目录的隐藏
+    // hidecapture(){
+    //     this.changeisanyshow(3,false);
+    // },
+    // 目录组件的状态数据更改 
+    capturehide(){
+      this.changeisanyshow(3,false);
     },
-    // 目录的跳转通知
-    jumpandhide(href){
-    this.$store.commit('book/setcapturehref',href)
-    this.changeisanyshow(3,false);
-    },
-    // 移动端的chorme和safiry兼容 将innerheight给到capture-wraper
-   captureheight(){
-      this.$refs.captureWraper.style.height=`${global.innerHeight}px`;
-   },
+  
     // 字体元素控制组件是否显示-以及字体设置元素和菜单栏的阴影逻辑
     // 1 这个元素显示 menubar的阴影隐藏 size的阴影显示-所以干脆把这个样式抽出一个类名 去动态的添加删除类名
     toggleshowsetfontsize() {
+    
       this.lastcomponentactive.push(0);
       this.animatecontrol();
       this.changeisanyshow(0);
     },
     // 单击字体样式按钮显示 字体组件
     showFontfamily(){
+    
     this.setisshowFontfamily(true)
     },
     // 主题元素是否显示的事件回调
     toggleshowsettheme() {
+      // this.book.rendition.resize('300','300')
        this.lastcomponentactive.push(1);
          this.animatecontrol();
       this.changeisanyshow(1);
     },
+      // 主题元素的选择方法
+      setthem(e, themename) {
+        this.SETTHEME(themename);
+      },
     // 进度条元素是否显示的事件回调
     toggleshowprogress() {
       this.lastcomponentactive.push(2);
-         this.animatecontrol();
+      this.animatecontrol();
       this.changeisanyshow(2);
     },
-    // 主题元素的选择方法
-    setthem(e, themename) {
-      this.SETTHEME(themename);
-    },
     // 进度条事件
-    // 松手将进度数据给到vuex 给到bookreader的跳转事件
-    touchup() {
-      this.setpgspercent(this.value1);
+    // 松手跳转事件
+    touchup(val) {
+      this.progresschange(this.value1)
+      // 每次跳转之后将当前章节给到vuex的section中
+   
     },
+      // 分页和最终跳转
+    progresschange(progress) {
+      const percentage = progress / 100;
+      const location =
+        percentage > 0 ? this.book.locations.cfiFromPercentage(percentage) : 0;
+      this.$store.state.book.rendition.display(location).then(()=>{
+        // 跳转后更新当前章节的信息
+          this.setnowsection();
+      })
+    },
+    // 上一章和下一章  哪一章的数据在vuex中 可能后期其他组件也要用
+   presection(){
+    //  超出当前书籍章节长度直接return
+   if(this.isbookprogressready&&this.$store.state.book.section>0){
+     
+                console.log('b',this.$store.state.book.section);
 
+        this.setaction(this.section-1)
+        console.log('a',this.$store.state.book.section);
+          this.displaysection()
+
+       
+      }else{
+        return 
+      }
+   },
+    nextsection(){
+   
+  
+    //  spine为图书索引信息 length为总共的章节长度
+     
+       
+      if(this.isbookprogressready&&this.$store.state.book.section+1<this.$store.state.book.booksections.length){
+        
+        this.setaction(this.section+1)
+          this.displaysection()
+
+       
+      }else{
+        return 
+      }
+   },
+  //  章节跳转方法
+  displaysection(){
+    console.log('即将跳转',this.section);
+     const sectioninfo= this.book.section(this.section+1);
+      if(sectioninfo&&sectioninfo.href){
+        this.$store.state.book.rendition.display(sectioninfo.href).then(()=>{
+          //  每一次单击都要跳转 在此一对多的更新当前章节信息
+            this.setnowsection();
+          //  this.refershprogress()
+        
+         })
+      }
+  },
+  
+  
     // 重写ele-slibar-提示框-松手隐藏  产生问题：单击一个地方会立马被change的以下回调隐藏 设定延时
     hideslibartip() {
       setTimeout(() => {
@@ -386,11 +447,11 @@ const vm = {
       }
     );
     
-    // 初始化调用以及窗口变动调用
-    this.captureheight();
-    window.addEventListener('resize',()=>{
-      this.captureheight();
-    })
+    // // 初始化调用以及窗口变动调用
+    // this.captureheight();
+    // window.addEventListener('resize',()=>{
+    //   this.captureheight();
+    // })
     
   },
   updated() {
@@ -448,29 +509,30 @@ align-items: center;
     display: flex;
     justify-content: space-around;
     align-items: center;
-
+  
    
     .ico::before {
-      color: #333;
+      // color: #333;
       font-size: px2rem(28);
     }
 
-    :last-child {
-      height: 69%;
+    // 针对进度条的单独处理
+    :nth-child(2){
+      padding-top: px2rem(7)!important;
     }
-    .div-a {
-      padding-top: px2rem(3);
-      height: 100%;
-
-      font-family: emoji fangsong;
-      color: #333;
-      font-size: px2rem(33);
-      margin-right: px2rem(3);
-      font-weight: inherit；;
+    .icon-progress1::before{
+      font-size: px2rem(35);
     }
-
-  
-    background-position-y: px2rem(250);
+    
+    .icon-bright::before{
+      font-size: px2rem(26);
+    }
+      .icon-jindutiao-{
+        color:skyblue;
+      }
+      .icon-sun{
+        color: skyblue;
+      }
   
   }
   // 字体设置功能样式
@@ -502,11 +564,11 @@ align-items: center;
     }
     span {
       color: #333;
-      font-size: px2rem(28);
+      font-size: px2rem(24);
       margin: 10px;
     }
     .sizespan1 {
-      font-size: px2rem(24);
+      // font-size: px2rem(24);
       margin-right: px2rem(20);
     }
 
@@ -637,64 +699,7 @@ align-items: center;
     // 修饰样式 不重要
     background-color: white;
   }
-// .capture{
- 
-//      // 任何屏幕情况下宽度都是100%，但是高度自适应
-//     width: 100vw;
-//     height: 100vh;
-//     // 需要在页面下方 设置浮动 影响到父元素动画在chorme和safiry移动端 卡顿没有动画  capture元素默认显示挡住了？
-//     position: absolute;
-//     left: 0;
-//     bottom: 0;
 
-//     z-index: 20;
-//     box-sizing: border-box;
-
-    .mask{
-      position: absolute;
-
-      bottom: 0;
-
-      z-index: 21;
-      width: 100%;
-      height: 100vh;
-      background: rgba(51, 51, 51, 80%);
-    }
-    .capture-wraper{
-      overflow: auto;
-    width: 210px;
-    // height: 100vh;
-    position: absolute;
-      
-     bottom: 0;
-
-    z-index: 22;
-    box-sizing: border-box;
-   
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    // flex-wrap: wrap;
-
-    li{
-      // 没有分数 禁止缩进 内容决定主轴宽高
-      flex:0 0 0;
-      // 样式
-      border-bottom: px2rem(1) solid rgb(244, 244, 244);
-      box-sizing: border-box;
-      padding: px2rem(5);
-      margin: px2rem(12) 0;
-      width: 85%;
-      // height: px2rem(60);
-      font-size: px2rem(15);
-      list-style: none;
-      cursor: pointer;
-    }
-    }
-   
-// }
 
 }
 </style>

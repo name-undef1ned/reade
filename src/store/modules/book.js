@@ -20,7 +20,17 @@ export default{
      
         commit('SETSELECTED',newv);
 
-    }
+    },
+    setaction(contenxt,newv){
+        
+        if(newv<contenxt.state.booksections.length&&newv>=0){
+            
+            return contenxt.commit('SETSECTION',newv)
+        }else{
+
+            Promise.reject('大与或小于图书章节长度')
+        }
+    },
     },
     mutations:{
     // action和mutaion大小写对照
@@ -63,6 +73,27 @@ export default{
     },
     setrendition(state,newv){
         state.rendition=newv;
+    },
+    SETBOOK(state,newv){
+        state.book=newv;
+    },
+    SETSECTION(state,newv){
+        state.section=newv;
+    },
+    SETBOOKSECTIONS(state,newv){
+        state.booksections=newv;
+    },
+    SETNOWSECTION(state,newv){
+        state.nowsection=newv;
+    },
+    SETVALUE1(state,newv){
+        state.value1=newv;
+    },
+    SETCOVERURL(state,newv){
+        state.coverurl=newv;
+    },
+    SETBOOKMETADATA(state,newv){
+        state.bookmetadata=newv;
     }
     },
     state:{
@@ -133,9 +164,16 @@ export default{
         isbookprogressready:false,
         // bookmenu的进度值
         pgspercent:0,
+        booksections:{},
+        nowsection:{},
+        section:0,
+        value1:0,
+        book:{},
         navigation:{},
         rendition:{},
-        capturehref:''
+        capturehref:'',
+        coverurl:null,
+        bookmetadata:null
 
     },
     getters:{
