@@ -2,9 +2,9 @@
   <div id="read" ref="read">
     <div id="read1" wraper="_"></div>
     <loading v-if="isshowwindowchangetip" 
-    :right="'0'" 
+    :right="'12%'" 
     :top="'10%'" 
-    :color="'green'" 
+    :color="'black'" 
     :backgroundColor="'rgba(135, 206, 235, 100%)'"
     :message="'检测到窗口变化,正在重新加载图书...'">
     </loading>

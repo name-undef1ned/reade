@@ -2,10 +2,11 @@
   <div class="family-wraper">
    <div class="family-title">
      <span class="icon-down iconfont" @click="hidefontFamily"></span>
-     字体设置
+     字体
    </div>
 
    <div class="familylist-wraper">
+
      <li v-for="(item,index) in fontfamilylist" 
      class="fontlist" 
      :key="index" 
@@ -14,7 +15,8 @@
      :class="{selectcurrent:$store.state.book.fontfamilyselected==item}"
      >
             <span>{{item+$store.state.book.fontfamilylistlang[index]}}
-            </span><span class="icon-check iconfont" v-if="$store.state.book.fontfamilyselected==item"></span>
+            </span>
+            <!-- <span class="icon-check iconfont" v-if="$store.state.book.fontfamilyselected==item"></span> -->
       </li>
     
    </div>
@@ -51,6 +53,12 @@ methods: {
 
 <style lang="scss" scoped>
 @import '../../../assets/styles/global.scss';
+  .selectcurrent{
+      color: cornflowerblue !important;
+      border: px2rem(1) solid #87ceeb;
+    }
+
+
 .family-wraper{
   position: absolute;
   bottom: 0;
@@ -67,6 +75,7 @@ methods: {
   max-height: px2rem(250);
   overflow: auto;
   background: white;
+  // backdrop-filter: blur(20px);
     /* x偏移量 | y偏移量 | 阴影模糊半径 | 阴影扩散半径 | 阴影颜色 */
     box-shadow: px2rem(0) px2rem(-5) px2rem(3) px2rem(0) rgba(0, 0, 0, 10%);
   .family-title{
@@ -80,42 +89,60 @@ methods: {
     padding: px2rem(5) 0;
     @include center;
      font-size: px2rem(20);
-      border-bottom: px2rem(1) solid rgb(244, 244, 244);
+      // border-bottom: px2rem(1) solid rgb(244, 244, 244);
     .icon-down{
       position: absolute;
       left: 0;
+      padding-left: px2rem(20);
       margin-left: px2rem(5);
     }
     text-align: center;
   }
 
-    .selectcurrent{
-      color: cornflowerblue !important;
-    }
-  .fontlist{
+  
+ 
+  
+  .familylist-wraper{
+  text-align: center;
+  // font-size: px2rem(18);
+  
+  // 改写瀑布流区域
+display: flex;
+justify-content: space-around;
+align-items: flex-start;
+flex-wrap: wrap;
+ .fontlist{
     // position: absolute;
     list-style: none;
       // border-bottom: px2rem(1) solid rgb(244, 244, 244);
-      width: 100%;
-      height: px2rem(30);
+      // width: 100%;
+      height: px2rem(50);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    // text-align: left;
-    // font-weight: bold;
-  
+    
+    // 改写瀑布流区域
+  width: px2rem(150);
+  margin: px2rem(3) px2rem(3);
+//  border: 1px solid cyan;
+  background: rgba(231, 227, 208, 20%);
+  font-size: px2rem(15);
+
+  border-radius: px2rem(7);
+
+  transition: all 0.3s ease;
+  -ms-transition:all 0.3s ease;/*IE*/
+ -moz-transition: all 0.3s ease; /* Firefox 4 */
+ -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
+ -o-transition: all 0.3s ease; /* Opera */
+
 
    span{
       padding: 0 px2rem(15);
    }
    
   }
-  
-  .familylist-wraper{
-  text-align: center;
-       font-size: px2rem(18);
-
   }
 }
 

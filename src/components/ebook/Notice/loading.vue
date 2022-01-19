@@ -31,7 +31,7 @@ export default {
         this.$refs.loadingwrap.style.bottom=this.bottom;
         this.$refs.loadingwrap.style.color=this.color;
         this.$refs.loadingwrap.style.borderColor=this.color;
-        this.$refs.loadingwrap.style.background=this.backgroundColor;
+        // this.$refs.loadingwrap.style.background=this.backgroundColor;
 
 
         // 自销毁逻辑
@@ -53,14 +53,17 @@ export default {
 <style lang="scss" scoped>
 @import '../../../assets/styles/global.scss';
 .loading-wrap{
+    z-index: 99;
     width: px2rem(140);
     max-width: px2rem(200);
     // height: px2rem(100);
     // 高度不应被限制 由内容决定
     // max-height: px2rem(200);
 
-    border: 1px solid cyan;
-    // border-color: red;
+    // 开启毛玻璃效果
+    backdrop-filter: blur(px2rem(20));
+    -webkit-backdrop-filter: blur(px2rem(20));
+    // border: 1px solid cyan;
     box-sizing: border-box;
     position: absolute;
     z-index: 30;
@@ -71,7 +74,7 @@ export default {
     
     border-radius:6%;
     // background: rgba(83, 107, 107,10%);
-    background: white;
+    // background: white;
     color: black;
 
     // overflow: hidden;
