@@ -101,7 +101,7 @@
     <div class="setprogress" v-if="isanyshow[2]" ref="setprogress" :class="{ showclass: isanyshow[2]}">
      <!-- 章节目录提示 -->
       <div class="progresstip-wraper">
-        {{ isbookprogressready === false ? "加载中..." : `${section}${nowsection.label}` }}
+        {{ isbookprogressready === false ? "加载中..." : `${nowsection.label}` }}
       </div>
 
       <!-- 进度条 -->
@@ -225,6 +225,7 @@ const vm = {
     // },
     // 目录组件的状态数据更改 
     capturehide(){
+      // console.log('haha');
       this.changeisanyshow(3,false);
     },
   
@@ -266,7 +267,8 @@ const vm = {
    
     },
       // 分页和最终跳转
-    progresschange(progress) {
+     progresschange(progress) {
+     
       const percentage = progress / 100;
       const location =
         percentage > 0 ? this.book.locations.cfiFromPercentage(percentage) : 0;
@@ -279,27 +281,18 @@ const vm = {
    presection(){
     //  超出当前书籍章节长度直接return
    if(this.isbookprogressready&&this.$store.state.book.section>0){
-     
-                console.log('b',this.$store.state.book.section);
-
         this.setaction(this.section-1)
-        console.log('a',this.$store.state.book.section);
           this.displaysection()
-
-       
       }else{
         return 
       }
    },
     nextsection(){
-   
-  
     //  spine为图书索引信息 length为总共的章节长度
-     
-       
       if(this.isbookprogressready&&this.$store.state.book.section+1<this.$store.state.book.booksections.length){
         
         this.setaction(this.section+1)
+        console.log(this.section,this.section+1);
           this.displaysection()
 
        
@@ -309,8 +302,10 @@ const vm = {
    },
   //  章节跳转方法
   displaysection(){
-    console.log('即将跳转',this.section);
-     const sectioninfo= this.book.section(this.section+1);
+    // console.log('即将跳转',this.section);
+    //  const sectioninfo= this.book.section(this.section+1);
+     const sectioninfo= this.$store.state.book.booksections[this.section];
+     console.log(sectioninfo);
       if(sectioninfo&&sectioninfo.href){
         this.$store.state.book.rendition.display(sectioninfo.href).then(()=>{
           //  每一次单击都要跳转 在此一对多的更新当前章节信息
@@ -447,11 +442,11 @@ const vm = {
       }
     );
     
-    // // 初始化调用以及窗口变动调用
-    // this.captureheight();
-    // window.addEventListener('resize',()=>{
-    //   this.captureheight();
-    // })
+    // 将隐藏目录方法注册到事件总线对象
+    this.$bus.$on('capturehide',()=>{
+      // console.log(11);
+      this.capturehide();
+    })
     
   },
   updated() {

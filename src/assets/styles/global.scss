@@ -66,6 +66,12 @@ margin-bottom: 10px;
   border:px2rem(1) solid skyblue;
 }
 
+// 搜索字符高亮 动态添加的元素家在这里
+.search-content-text{
+  color: cornflowerblue;
+  font-weight: bolder;
+}
+
 // 公共样式区域
 // 动态样式 有逻辑的 抽离出一个独立的类名
 .showclass {
@@ -175,7 +181,7 @@ margin-bottom: 10px;
   opacity: 1;
 }
 //  整个过程
-.fade-enter-active,.v-leave-active{
+.fade-enter-active,.fade-leave-active{
  transition:all .3s linear;
  -ms-transition:all 0.3s ease;/*IE*/
  -moz-transition: all 0.3s ease; /* Firefox 4 */
@@ -183,3 +189,4 @@ margin-bottom: 10px;
  -o-transition: all 0.3s ease; /* Opera */
 }
  
+

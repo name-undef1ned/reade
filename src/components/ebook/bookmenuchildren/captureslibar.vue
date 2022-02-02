@@ -12,39 +12,105 @@
         <div class="search-wraper">
           <div class="search-box-wraper">
             <span class="icon-search iconfont"></span>
-            <input type="text" placeholder="搜索全书内容" />
+            <input type="text" v-model="searchText" placeholder="搜索全书内容" @focus="search" @keyup.enter="inputdone"/>
           </div>
-          <div class="search-cancel-wraper">取消</div>
+          <div class="search-cancel-wraper" @click="cancelsearch" v-if="issearch">取消</div>
         </div>
-              <!-- 当前dom渲染早于vuex的数据生成，在此进行占位 -->
-              <span v-if="!this.$store.state.book.bookmetadata">加载中.......</span>
-        <div class="section-wraper" v-else>
+
+
+
+        <!-- 当前dom渲染早于vuex的数据生成，在此进行占位 -->
+        <span v-if="!this.$store.state.book.bookmetadata">加载中.......</span>
+        <div class="section-wraper" v-if="this.$store.state.book.bookmetadata" v-show="!issearch">
           <!-- 图书元数据展示模块 -->
           <div class="metawraper">
             <div class="cover-wraper">
-              <img :src="$store.state.book.coverurl" alt="" />
+              <img
+                :src="$store.state.book.coverurl"
+                v-if="$store.state.book.coverurl"
+                alt=""
+              />
+              <img
+                v-else
+                src="https://tse3-mm.cn.bing.net/th/id/OIP-C.0NqZJNM7Jt-f3TfckfBFKAHaJY?pid=ImgDet&rs=1"
+                alt=""
+              />
             </div>
             <div class="bookmeta-wraper">
-              <span class="book-title">{{this.$store.state.book.bookmetadata.title}}</span>
-              <span class="book-author">作者:{{this.$store.state.book.bookmetadata.creator}}出版社:{{this.$store.state.book.bookmetadata.publisher}}...</span>
+              <span class="book-title">{{
+                this.$store.state.book.bookmetadata.title
+              }}</span>
+              <span class="book-author"
+                >作者:{{ this.$store.state.book.bookmetadata.creator }}</span
+              >
             </div>
             <div class="bookreadertime-wraper">
-              <span class="readtime-section">第{{this.$store.state.book.section}}章</span>
-              <span class="readtime-progress">{{this.$store.state.book.value1}}%已阅读</span>
-
+              <span class="readtime-section"
+                >*{{ this.$store.state.book.nowsection.label }}</span
+              >
+              <span class="readtime-progress"
+                >{{ this.$store.state.book.value1 }}%已阅读</span
+              >
             </div>
           </div>
           <!-- 章节列表模块 -->
-          <div class="li-wraper">
+
+          <!-- 1降维数据思路 ->
+           <div class="li-wraper">
             <li
-              v-for="(item, index) in navigation.toc"
+              v-for="(item, index) in flattenTocArr"
               :key="index"
+              :class="{'level1':item.level==1,'level2':item.level==2,'level3':item.level==3,}"
               @click="jumpandhide(item.href)"
             >
-              <span>第{{ index + 1 }}章:</span>
+            
+            <div class="li-mes-wraper" v-if="item.level==1">
               <span>{{ item.label }}</span>
+            </div>
+           
             </li>
           </div>
+        </div> -->
+
+          <!-- 2条件渲染思路 -->
+          <!-- <div class="li-wraper">
+            <li
+              v-for="(item, index) in flattenTocArr"
+              :key="index"
+              v-if="item.level==1"
+              :class="{'level1':item.level==1,'level2':item.level==2,'level3':item.level==3}"
+              @click="jumpandhide(item.href)"
+            >
+              <div class="li-mes-wraper">
+              <span :class="{'nowsectioncolor':item.href==nowsection.href}">{{ item.label }}</span>
+              <span class="iconfont icon-back" v-if="item.subitems[0]" @click.stop="isshowson"></span>
+              </div>
+               
+                  <div class="son" v-if="item.subitems[0]">
+                <div class="li-mes-wraper" v-for="(item2, index2) in item.subitems" :key="index2+'sec'">
+                  <li :class="{'nowsectioncolor':item2.href==nowsection.href}" @click.stop="jumpandhide(item2.href)">
+                       <span>{{ item2.label }}</span>
+                  </li>
+                </div>
+              </div>
+               
+           
+            </li>
+          </div> -->
+
+          <!-- 3递归组件思路 -->
+          <capturerender
+            :arr="$store.state.book.navigation.toc"
+          ></capturerender>
+          <!-- 填充用空白盒子 -->
+          <div style="height:px2rem(40)"></div>
+        </div>
+        <div class="search-content-wraper" v-show="issearch">
+        <div class="search-wontent-nulltip" v-show="!searchList[0]">暂无数据...</div>
+
+          <li v-for="(item,index) in searchList" @click="jumpandhide(item.cfi)" :key="index+'search'" v-html="(index+1)+':'+item.excerpt"></li>
+          <!-- 填充用空白盒子 -->
+          <div style="height:px2rem(40)"></div>
         </div>
 
         <div class="footer-wraper">
@@ -70,36 +136,56 @@
         @click="$emit('capturehide')"
       ></div>
     </transition>
+
   </div>
 </template>
 
 <script>
 import mixin from "../../../utils/mixin";
 import { mapState } from "vuex";
+import capturerender from "../bookmenuchildren/capturerender.vue";
+import loading from '../Notice/loading.vue'
 export default {
   name: "captureslibar",
   mixins: [mixin],
   props: ["isanyshow", "capturehide"],
+  components: {
+    capturerender,
+    loading
+  },
   data() {
     return {
       isshowanytabel: 1,
+      issearch:false,
+      searchText:'',
+      searchList:[],
+      isshowtip:false
     };
   },
   computed: {
     ...mapState("book", ["navigation", "book"]),
+    flattenTocArr() {
+      // computed早于vuex数据，在此处理报错
+      if (!this.navigation.toc) {
+        return;
+      } else {
+        return this.flatten(this.navigation.toc);
+      }
+    },
   },
   methods: {
-    
     // 移动端的chorme和safiry兼容 将innerheight给到capture-wraper
     captureheight() {
       setTimeout(() => {
-      this.$refs.captureWraper.style.height = `${window.innerHeight}px`;
+        this.$refs.captureWraper.style.height = `${window.innerHeight}px`;
       }, 1000);
     },
     jumpandhide(href) {
       this.book.rendition.display(href).then(() => {
         // 更新当前章节信息
         this.setnowsection();
+        this.book.rendition.annotations.highlight(href)
+
       });
 
       this.setistitleandmenushow();
@@ -107,26 +193,62 @@ export default {
       //   隐藏通知父组件更改状态数据
       this.$emit("capturehide");
     },
+    // justjump(href){
+    //    this.book.rendition.display(href).then(() => {
+    //     // 更新当前章节信息
+    //     this.setnowsection();
+    //     this.book.rendition.annotations.highlight(href)
+    //   });
+    // },
+    doSearch(q) {
+      return Promise.all(
+        this.book.spine.spineItems.map((item) =>
+          item
+            .load(this.book.load.bind(this.book))
+            .then(item.find.bind(item, q))
+            .finally(item.unload.bind(item))
+        )
+      ).then((results) => Promise.resolve([].concat.apply([], results)));
+    },
+
+    // 用户单击搜索框
+    search(){
+      this.issearch=true
+    },
+    // 用户回车搜索 且 内容高亮
+    inputdone(e){
+      if(this.searchText&&this.searchText.length>0){
+        this.book.ready.then(()=>{
+          this.doSearch(this.searchText).then(res=>{
+            this.searchList=res;
+            this.searchList.map(item=>{
+              item.excerpt=item.excerpt.replace(this.searchText,`<span class="search-content-text">${this.searchText}</span>`)
+              return item
+            })
+       })
+        })
+      }else{
+        this.searchList=[];
+      }
+        e.target.blur()
+    
+    },
+    // 取消
+    cancelsearch(){
+      this.issearch=false;
+      this.searchText='';
+      this.searchList=[];
+    }
   },
-  beforeMount() {
- 
-  },
+  beforeMount() {},
   mounted() {
-      //  初始化调用以及窗口变动调用
-      // refs注册时间在mounted之后 所以初始化会是undifend
-    // console.log('mounted时机',this.$refs.captureWraper);-undefined
-    // setTimeout(() => {
-    // console.log('mounted定时器时机',this.$refs.captureWraper);-正常
-      
-    // }, 100);
     this.captureheight();
 
     window.addEventListener("resize", () => {
       this.$refs.captureWraper.style.height = `${window.innerHeight}px`;
-    });  
+    });
   },
-  updated() {
-  },
+  updated() {},
 };
 </script>
 
@@ -136,6 +258,8 @@ export default {
 .footer-span-current {
   color: cornflowerblue;
 }
+ 
+
 .captureslibar-wraper {
   width: 100%;
 
@@ -206,11 +330,12 @@ export default {
         flex: 0 0 15%;
         text-align: center;
         // color: rgb(206, 15, 15);
-        color: black;
+        color: cornflowerblue;
         font-size: px2rem(15);
       }
     }
     .section-wraper {
+      flex: 1;
       overflow: auto;
       width: 100%;
       flex: 0 0 1;
@@ -229,7 +354,6 @@ export default {
         background: rgba(231, 227, 208, 20%);
 
         .cover-wraper {
-          
           flex: 1;
           @include center;
           height: 100%;
@@ -242,7 +366,7 @@ export default {
           }
         }
         .bookmeta-wraper {
-          flex:1;
+          flex: 1;
           display: flex;
           flex-direction: column;
           justify-content: flex-start;
@@ -250,96 +374,118 @@ export default {
           flex-wrap: wrap;
 
           padding: px2rem(10) px2rem(1);
-             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: normal;
-          span{
-            
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          span {
             width: 100%;
-             text-align: left;
+            text-align: left;
           }
-          .book-title{
+          .book-title {
             text-align: center;
             height: px2rem(15);
             font-size: px2rem(15);
             padding-bottom: px2rem(2);
-           
-          
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
           }
-          .book-author{
+          .book-author {
+            // display: inline-block;
+            width: 100%;
+            flex: 1;
             font-size: px2rem(10);
-            
-           
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
+            // 自动折行
+            word-break: break-all;
           }
         }
         .bookreadertime-wraper {
-          flex:1;
-            display: flex;
+          flex: 1;
+          display: flex;
           flex-direction: column;
           justify-content: flex-start;
           align-items: flex-start;
           flex-wrap: wrap;
 
           padding: px2rem(10) px2rem(1);
-             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: normal;
-          span{
-               width: 100%;
-          
-             text-align: left;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: normal;
+          span {
+            width: 100%;
+
+            text-align: left;
           }
-          .readtime-section{
-             padding-bottom: px2rem(2);
+          .readtime-section {
+            padding-bottom: px2rem(2);
             text-align: center;
             font-size: px2rem(14);
           }
-          .readtime-progress{
-          font-size: px2rem(12);
-          text-align: center;
-          }
-        }
-      }
-
-      .li-wraper {
-        li {
-          // 没有分数 禁止缩进 内容决定主轴宽高
-          flex: 0 0 0;
-          // 样式
-          //   border-bottom: px2rem(1) solid rgb(244, 244, 244);
-          border-bottom: px2rem(1) solid rgba(83, 107, 107, 0.2);
-          box-sizing: border-box;
-          padding: px2rem(12) 0;
-          width: 85%;
-          // height: px2rem(60);
-          font-size: px2rem(15);
-          list-style: none;
-          cursor: pointer;
-          display: flex;
-          justify-content: flex-start;
-          //   align-items: center;
-          :nth-child(2) {
-            flex: 1;
-            color: #333;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+          .readtime-progress {
+            font-size: px2rem(12);
+            text-align: center;
           }
         }
       }
     }
 
+
+    .search-content-wraper{
+      width:100%;
+      overflow: auto;
+      box-sizing: border-box;
+      padding: px2rem(2) px2rem(5);
+      .search-wontent-nulltip{
+        font-size: px2rem(20);
+        text-align: center;
+        box-sizing: border-box;
+        width: px2rem(100);
+        position: absolute;
+        top: 10%;
+        left: 50%;
+        transform: translate3d(-50%,0,0);
+
+        color: rgba(83, 107, 107, 0.7);
+
+      }
+      li{
+          border-bottom: px2rem(1) solid rgba(83, 107, 107, 0.2);
+
+        box-sizing: border-box;
+       margin: px2rem(10) 0;
+      list-style: none;
+      font-size: px2rem(14);
+      width: 100%;
+      min-height: px2rem(30);
+      // max-height: px2rem(50);
+      // height: px2rem(25);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+     .search-content-text{
+        // color: cornflowerblue;
+        font-weight: bolder;
+        background: cornflowerblue;
+      }
+      }
+    }
     .footer-wraper {
       width: 100%;
       min-height: px2rem(40);
-      flex: 0 0 7%;
+
+      // flex: 0 0 7%;
+      position: absolute;
       bottom: 0;
-      position: sticky;
+
       display: flex;
       justify-content: space-around;
       align-items: center;
       box-sizing: border-box;
-      // background-color: white;
+      background-color: white;
       // border: 1px solid cyan;
       /* x偏移量 | y偏移量 | 阴影模糊半径 | 阴影扩散半径 | 阴影颜色 */
       box-shadow: px2rem(0) px2rem(-1) px2rem(3) px2rem(0) rgba(0, 0, 0, 10%);

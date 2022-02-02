@@ -24,6 +24,7 @@ export default{
     setaction(contenxt,newv){
         
         if(newv<contenxt.state.booksections.length&&newv>=0){
+            console.log('newv',newv);
             
             return contenxt.commit('SETSECTION',newv)
         }else{
@@ -78,7 +79,9 @@ export default{
         state.book=newv;
     },
     SETSECTION(state,newv){
+        console.log('成功触发');
         state.section=newv;
+        console.log(state.section);
     },
     SETBOOKSECTIONS(state,newv){
         state.booksections=newv;

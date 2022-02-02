@@ -1,24 +1,17 @@
-# readerdemo
+# 基于vue2 vue-cli4 vuex epub.js等开发的阅读软件
 
-## Project setup
+
+## 项目依赖下载
 ```
-npm install
+npm i
 ```
 
-### Compiles and hot-reloads for development
+## 前端服务启动
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## 后端基于nginx
 
-### Lints and fixes files
-```
-npm run lint
-```
+~~[后端地址](http://www.暂未上传.com)~~
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
