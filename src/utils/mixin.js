@@ -16,6 +16,9 @@ export default {
             "fontfamilylist",
             'section',
             'nowsection',
+            'offsetY',
+            'hastouchup'
+            
             
         ]),
     },
@@ -28,7 +31,10 @@ export default {
             "setrendition",
             "SETBOOKSECTIONS",
             "SETNOWSECTION",
-            "SETVALUE1"
+            "SETVALUE1",
+            'SETOFFSETY',
+            'HASTOUCHUP',
+            'SETLASTOFFSETY'
         ]),
         ...mapActions("book", ["setfilename", "setistitleandmenushow", "setaction"]),
         // 根据当前位置获取当前章节对象和维护的章节数据

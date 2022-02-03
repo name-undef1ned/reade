@@ -97,6 +97,15 @@ export default{
     },
     SETBOOKMETADATA(state,newv){
         state.bookmetadata=newv;
+    },
+    SETOFFSETY(state,newv){
+        state.offsetY=newv;
+    },
+    HASTOUCHUP(state,newv){
+        state.hastouchup=newv;
+    },
+    SETLASTOFFSETY(state,newv){
+        state.lastoffsetY=newv;
     }
     },
     state:{
@@ -176,7 +185,13 @@ export default{
         rendition:{},
         capturehref:'',
         coverurl:null,
-        bookmetadata:null
+        bookmetadata:null,
+        // 书签功能下拉手势偏移量
+        offsetY:0,
+        // 记录用户上一次的下拉量
+        lastoffsetY:0,
+        // 记录用户是否松手
+        hastouchup:false
 
     },
     getters:{

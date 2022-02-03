@@ -47,25 +47,7 @@ const vm = {
       cursorefn: {},
       isshowwindowchangetip: false,
       hasdisplay: false,
-      arr: [
-        {
-          name: "w",
-          locallev: "第一级",
-          subitems: [
-            {
-              name: "ws",
-              locallev: "第二级",
-              subitems: [
-                {
-                  name: "wsb",
-                  locallev: "第三级",
-                  subitems: [],
-                },
-              ],
-            },
-          ],
-        },
-      ],
+    
     };
   },
   computed: {
@@ -171,6 +153,32 @@ const vm = {
       } else {
         this.$store.commit("book/SETTHEME", theme);
       }
+    },
+    // 设定书签功能下拉的偏移量
+    setbookoffsetY(){
+      this.rendition.on('touchmove',e=>{
+        this.HASTOUCHUP(false)
+      // 这一次减去上一次的就是偏移量
+      if(this.firstoffsety){
+        // 存在就是第二次 采用screen属性 clienty不会一直递增在这个程序逻辑，采用整数运算
+        this.SETOFFSETY(parseInt(e.changedTouches[0].screenY)-parseInt(this.firstoffsety));
+      }else{
+        // 不存在就是第一次，存储到实例对象
+        this.firstoffsety=e.changedTouches[0].screenY;
+      }
+      // e.preventDefault();
+      e.stopPropagation();
+      // console.log(this.firstoffsety,e.changedTouches[0].clientY);
+      })
+      this.rendition.on('touchend',()=>{
+        this.HASTOUCHUP(true)
+        // 重置之前记录这一次的下拉量
+        console.log(this.offsetY);
+        this.SETLASTOFFSETY(this.offsetY)
+        // 每一次下拉动作结束清空数据 为下一次下拉做准备
+        this.SETOFFSETY(0);
+        this.firstoffsety=null;
+      })
     },
     // 获取图书的基本元数据（出版社作者..）以及封面url方法
     parsebook() {
@@ -282,6 +290,8 @@ const vm = {
           // this.setnowsection()
         }).then(()=>{
             // 初始化存储当前章节信息
+          // this.SETNOWSECTION(this.booksections[this.book.rendition.currentLocation().end.index]);
+          // console.log(this.booksections,this.book.rendition.currentLocation().end.index);
           this.SETNOWSECTION(this.booksections[this.book.rendition.currentLocation().end.index]);
         })
 
@@ -410,7 +420,10 @@ const vm = {
       //  样式背景色功能-注册函数调用
       this.registerTheme();
       this.parsebook();
-    });
+    }).then(()=>{
+      // 调用书签功能的手势方法
+      this.setbookoffsetY();
+    })
 
     // 字体大小功能监听兄弟组件设置的fontsize变化做出对应字号设置
     this.$watch(
@@ -445,6 +458,7 @@ const vm = {
     );
 
     this.windowchange();
+ 
   },
   watch: {},
 };
@@ -466,6 +480,7 @@ export default vm;
   width: 100vw;
   height: 100vh;
   // @include center;
+  
 }
 
 .span1 {

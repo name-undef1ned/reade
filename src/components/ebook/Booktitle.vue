@@ -38,7 +38,7 @@ name:'Booktitle'
     position: absolute;
     left: 0;
     top: 0;
-    z-index: 10;
+    z-index: 20;
     // 使用flex布局排列左边的1个ico的div和右边三个ico的div
     display: flex;
     
