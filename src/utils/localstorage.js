@@ -73,4 +73,12 @@ export function setlocationcfi(filename,locationcfi){
 return setbookobj(filename,'locationcfi',locationcfi)
 }
 
+// 获取marklist
+    export function getmarklist(filename){
+    return getbookobj(filename,'marklist')
+    }
+    // 存入marklist
+    export function setmarklist(filename,marklist){
+    return setbookobj(filename,'marklist',marklist)
+    }
 

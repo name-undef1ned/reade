@@ -47,6 +47,8 @@ const vm = {
       cursorefn: {},
       isshowwindowchangetip: false,
       hasdisplay: false,
+      // 计数器
+      touchcount:0
     
     };
   },
@@ -65,7 +67,7 @@ const vm = {
     // 翻页功能具体实现 上翻 下翻 显示控制menu
     prevPage() {
       if (this.rendition) {
-        this.rendition.prev();
+        this.rendition.prev()
       }
     },
     nextPage() {
@@ -154,30 +156,60 @@ const vm = {
         this.$store.commit("book/SETTHEME", theme);
       }
     },
-    // 设定书签功能下拉的偏移量
+    // 设定书签功能下拉的偏移量  同时通过用户手势判断用户是否翻页更新当前章节信息
     setbookoffsetY(){
       this.rendition.on('touchmove',e=>{
+    
+        this.touchcount+=1
         this.HASTOUCHUP(false)
       // 这一次减去上一次的就是偏移量
       if(this.firstoffsety){
+      // 取到mousemove事件的第一次和第二次值进行判断用户的意图.-方向使用y轴数据判断，斜率使用x轴差距判断，
+        if(this.touchcount==2){
+          // 其他方向
+          if(e.changedTouches[0].screenY<=this.firstoffsety||Math.abs(e.changedTouches[0].screenX-this.firstoffsetX)>=0.5) {
+            // 该变量决定后续逻辑是否启用
+          this.ISTOUCHDOWN(false)
+          
+         
+        }else{
+          // 下拉
+          this.ISTOUCHDOWN(true)
+
+        }
+        }
+        
         // 存在就是第二次 采用screen属性 clienty不会一直递增在这个程序逻辑，采用整数运算
         this.SETOFFSETY(parseInt(e.changedTouches[0].screenY)-parseInt(this.firstoffsety));
+       
+       
       }else{
         // 不存在就是第一次，存储到实例对象
         this.firstoffsety=e.changedTouches[0].screenY;
+        this.firstoffsetX=e.changedTouches[0].screenX;
       }
-      // e.preventDefault();
       e.stopPropagation();
-      // console.log(this.firstoffsety,e.changedTouches[0].clientY);
+     
+      
+
+  
+    
       })
-      this.rendition.on('touchend',()=>{
+      this.rendition.on('touchend',(e)=>{
+        this.touchcount=0;
         this.HASTOUCHUP(true)
         // 重置之前记录这一次的下拉量
-        console.log(this.offsetY);
+      
         this.SETLASTOFFSETY(this.offsetY)
         // 每一次下拉动作结束清空数据 为下一次下拉做准备
-        this.SETOFFSETY(0);
+      
+             this.SETOFFSETY(0);
         this.firstoffsety=null;
+     
+           //  翻页就更新
+           setTimeout(() => {
+             this.setnowsection();
+           }, 200);
       })
     },
     // 获取图书的基本元数据（出版社作者..）以及封面url方法
@@ -205,22 +237,6 @@ const vm = {
       });
     },
     initrendition() {
-      // resize方法覆盖原有逻辑
-      // 每次窗口变化重新渲染功能-执行之前先销毁以前的
-      // document.querySelector('#read1').remove();
-      // let newread = document.createElement("div");
-      // newread.id = "read1";
-      // newread.classList+='wh'
-      // newread.style.width='100%';
-      // newread.style.height='100%';
-      // newread.setAttribute("wraper", "_");
-      // read.appendChild(newread);
-
-      // let readarr = document.querySelectorAll("div[wraper]");
-      // readarr[0].remove();
-
-      // 3开始渲染 book的renderto方法生成显然对象rendition  并配置翻页动画字段
-      //  选择屏幕宽度常量 如使用innerwidth页面可视区域edge firfox会有问题-一开始的值很大大到会双页显示.能否挑出这两个浏览器编程正常的节点赋值？
       const screenwidth = screen.width;
       // 谷歌内核即chorme safiry的横屏screenwidth属性不会变化，edge firefox内核对于innerwidth初始化值过大
       // 故而采用兼容性好一点的vw-但是又会影响到章节组件高度
@@ -458,6 +474,8 @@ const vm = {
     );
 
     this.windowchange();
+
+
  
   },
   watch: {},

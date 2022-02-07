@@ -17,7 +17,10 @@ export default {
             'section',
             'nowsection',
             'offsetY',
-            'hastouchup'
+            'hastouchup',
+            'istouchdown',
+            'marklist',
+            'mark'
             
             
         ]),
@@ -34,7 +37,10 @@ export default {
             "SETVALUE1",
             'SETOFFSETY',
             'HASTOUCHUP',
-            'SETLASTOFFSETY'
+            'SETLASTOFFSETY',
+            'ISTOUCHDOWN',
+            'SETMARKLIST',
+            'SETMARK'
         ]),
         ...mapActions("book", ["setfilename", "setistitleandmenushow", "setaction"]),
         // 根据当前位置获取当前章节对象和维护的章节数据
@@ -52,6 +58,14 @@ export default {
                 console.log(nowpage);
                 // 3更新进度条
                 this.SETVALUE1(Math.floor(nowpage.end.percentage*100))
+                // 4.决定mark是否显示
+                let i=this.marklist.some((item)=>{
+                   if(item.cfi==nowpage.start.cfi){
+                       return true
+                   }
+               })
+           i?this.SETMARK(true):this.SETMARK(false)
+              
             } else {
                 // currentLocation获取到的多一个封面，-为真时等于减一，为假当前为0即封面的时候让当前对象为1即书籍信息
                 this.SETNOWSECTION(this.$store.state.book.booksections[0])

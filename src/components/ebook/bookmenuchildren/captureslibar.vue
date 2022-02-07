@@ -9,6 +9,9 @@
 
     <transition name="capture-wraper">
       <div class="capture-wraper" ref="captureWraper" v-show="isanyshow[3]">
+
+        <div class="capturetabel" v-show="isshowanytabel==1">
+
         <div class="search-wraper">
           <div class="search-box-wraper">
             <span class="icon-search iconfont"></span>
@@ -16,8 +19,6 @@
           </div>
           <div class="search-cancel-wraper" @click="cancelsearch" v-if="issearch">取消</div>
         </div>
-
-
 
         <!-- 当前dom渲染早于vuex的数据生成，在此进行占位 -->
         <span v-if="!this.$store.state.book.bookmetadata">加载中.......</span>
@@ -105,12 +106,35 @@
           <!-- 填充用空白盒子 -->
           <div style="height:px2rem(40)"></div>
         </div>
+
         <div class="search-content-wraper" v-show="issearch">
         <div class="search-wontent-nulltip" v-show="!searchList[0]">暂无数据...</div>
 
-          <li v-for="(item,index) in searchList" @click="jumpandhide(item.cfi)" :key="index+'search'" v-html="(index+1)+':'+item.excerpt"></li>
+          <li v-for="(item,index) in searchList" @click.stop="jumpandhide(item.cfi)" :key="index+'search'" v-html="(index+1)+':'+item.excerpt"></li>
           <!-- 填充用空白盒子 -->
           <div style="height:px2rem(40)"></div>
+        </div>
+        
+        </div>
+        <div class="marktabel" v-show="isshowanytabel==2">
+          <div class="title-wraper">
+            <span>书签*{{this.marklist.length}}</span>
+            <span class="showdel" @click="isshowdel=!isshowdel">删除</span>
+          </div>
+          <div class="mark-wraper" v-if="marklist[0]" v-for="(item,index) in marklist" :key="'mark'+index" >
+                <div class="icon-wraper">
+                    <span class="iconfont icon-mark"></span>
+                </div>
+                <div class="mark-text-wraper" @click.stop="jumpandhide(item.cfi)">
+                    <p>{{item.text}}</p>
+                </div>
+                <div class="delmark" v-show="isshowdel">
+                  <span @click="delmark(index)">删除</span>
+                </div>
+          </div>
+          <div class="nothing" v-if="!marklist[0]">
+            <span>暂无书签,下拉页面可即添加...</span>
+          </div>
         </div>
 
         <div class="footer-wraper">
@@ -145,6 +169,8 @@ import mixin from "../../../utils/mixin";
 import { mapState } from "vuex";
 import capturerender from "../bookmenuchildren/capturerender.vue";
 import loading from '../Notice/loading.vue'
+import {setmarklist} from '../../../utils/localstorage'
+
 export default {
   name: "captureslibar",
   mixins: [mixin],
@@ -159,7 +185,8 @@ export default {
       issearch:false,
       searchText:'',
       searchList:[],
-      isshowtip:false
+      isshowtip:false,
+      isshowdel:false
     };
   },
   computed: {
@@ -238,6 +265,10 @@ export default {
       this.issearch=false;
       this.searchText='';
       this.searchList=[];
+    },
+    delmark(index){
+      this.$store.commit('book/DELAMRKLIST',index);
+      setmarklist(this.filename,this.marklist)
     }
   },
   beforeMount() {},
@@ -289,9 +320,100 @@ export default {
     background-color: white;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     // flex-wrap: wrap;
+
+    .capturetabel{
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+    }
+    .marktabel{
+    width: 100%;
+    // height: 20%;
+    flex: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: auto;
+    .title-wraper{
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: px2rem(38);
+      border-bottom: px2rem(1) solid rgba(83, 107, 107, 0.2);
+      padding-left: px2rem(10);
+      box-sizing: border-box;
+      span{
+         font-weight: bolder;
+         font-size: px2rem(15);
+
+      }
+      .showdel{
+        position: absolute;
+        right: 0px;
+        top:50%;
+        color: red;
+        margin-right: px2rem(5);
+      }
+    }
+
+    .mark-wraper{
+    box-sizing: border-box;
+      width: 85%;
+      height: px2rem(72);
+      margin:px2rem(2) 0;
+      padding: px2rem(11) 0;
+      border-bottom: px2rem(1) solid rgba(83, 107, 107, 0.2);
+
+    @include center;
+    
+      .icon-wraper{
+        width: px2rem(25);
+        .icon-mark{
+          display: block;
+          font-size: px2rem(15);
+        }
+      }
+
+      .mark-text-wraper{
+          width: 100%;
+          height: px2rem(54.5);
+
+        p{
+          display: block;
+          width: 100%;
+          height: 100%;
+          line-height: px2rem(11);
+          font-size: px2rem(11);
+          word-break: break-all;
+          overflow: hidden;
+          white-space: normal;
+          text-overflow: ellipsis;
+          text-indent: px2rem(20);
+        }
+      }
+
+      .delmark{
+        width: px2rem(30);
+        height:100%;
+        color: red;
+        span{
+         font-size: px2rem(10);
+        }
+      }
+    }
+    .nothing{
+      span{
+        font-size: px2rem(15);
+        color: rgba(83, 107, 107, 0.5);
+      }
+    }
+
+    }
 
     .search-wraper {
       width: 100%;
@@ -299,6 +421,7 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+      padding: px2rem(5) 0;
       // background-color: white;
       /* x偏移量 | y偏移量 | 阴影模糊半径 | 阴影扩散半径 | 阴影颜色 */
       box-shadow: px2rem(0) px2rem(1) px2rem(3) px2rem(0) rgba(0, 0, 0, 10%);
@@ -439,6 +562,7 @@ export default {
       overflow: auto;
       box-sizing: border-box;
       padding: px2rem(2) px2rem(5);
+      flex: 1;
       .search-wontent-nulltip{
         font-size: px2rem(20);
         text-align: center;
@@ -476,18 +600,10 @@ export default {
     .footer-wraper {
       width: 100%;
       min-height: px2rem(40);
-
-      // flex: 0 0 7%;
-      position: absolute;
-      bottom: 0;
-
       display: flex;
       justify-content: space-around;
       align-items: center;
       box-sizing: border-box;
-      background-color: white;
-      // border: 1px solid cyan;
-      /* x偏移量 | y偏移量 | 阴影模糊半径 | 阴影扩散半径 | 阴影颜色 */
       box-shadow: px2rem(0) px2rem(-1) px2rem(3) px2rem(0) rgba(0, 0, 0, 10%);
       span {
         font-size: px2rem(17);

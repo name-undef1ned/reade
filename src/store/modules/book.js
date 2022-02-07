@@ -106,6 +106,22 @@ export default{
     },
     SETLASTOFFSETY(state,newv){
         state.lastoffsetY=newv;
+    },
+    ISTOUCHDOWN(state,newv){
+        state.istouchdown=newv;
+    },
+    SETMARKLIST(state,newv){
+        console.log('cunchuyici');
+            state.marklist.push({cfi:newv.cfi,text:newv.text});
+    },
+    replacemarklist(state,newv){
+        state.marklist=newv;
+    },
+    DELAMRKLIST(state,index){
+        state.marklist.splice(index,1)
+    },
+    SETMARK(state,newv){
+        state.mark=newv;
     }
     },
     state:{
@@ -191,7 +207,13 @@ export default{
         // 记录用户上一次的下拉量
         lastoffsetY:0,
         // 记录用户是否松手
-        hastouchup:false
+        hastouchup:false,
+        // 记录手势方向的状态变量
+        istouchdown:false,
+        // mark数组
+        marklist:[],
+        // mark是否显示
+        mark:false
 
     },
     getters:{
