@@ -460,9 +460,7 @@ export default vm;
 <style lang="scss" scoped>
 @import "../../assets/styles/global.scss";
 // 各种条件类
-.themezhuqingimage{
-      background-image: url("../../assets/img/p243944566.jpg") !important;
-  }
+
 .capturepointevent{
    pointer-events: none;
 }

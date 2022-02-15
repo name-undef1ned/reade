@@ -45,8 +45,6 @@ export default {
         ...mapActions("book", ["setfilename", "setistitleandmenushow", "setaction"]),
         // 根据当前位置获取当前章节对象和维护的章节数据
         setnowsection() {
-
-
             // 拿到当前位置信息
             const nowpage = this.book.rendition.currentLocation();
             if (nowpage && nowpage.end.href && nowpage.end.index) {
@@ -102,5 +100,14 @@ export default {
         // console.log(flattenlevel);
         return newarr;
       },
+    }
+}
+
+export const storehomemixin={
+    computed:{
+        ...mapState('storehome',['offsetY','issearch','cardvisible','homebooklist'])
+    },
+    methods:{
+        ...mapMutations('storehome',['SETOFFSETY','SETISSEARCH','SETCARDVISIBLE','SETHOMEBOOKLIST'])
     }
 }

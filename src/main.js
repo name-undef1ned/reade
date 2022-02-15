@@ -21,6 +21,9 @@ Vue.use(element)
 // 组件引入区
 import App from './App.vue'
 
+// 引入mock
+import './mock/index';
+
 
 // 禁用生产提示
 Vue.config.productionTip = false

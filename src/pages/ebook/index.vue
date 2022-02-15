@@ -1,3 +1,5 @@
+// 阅读器汇总组件
+
 <template>
   <div class="router-reader-wraper" ref="routerreaderwraper">
 
@@ -19,7 +21,7 @@
 <script>
 import Booktitle from '../../components/ebook/Booktitle.vue'
 import Bookmenu from '../../components/ebook/Bookmenu.vue'
-import bookmark from '../../components/bookmark.vue'
+import bookmark from '../../components/ebook/bookmark.vue'
 // 在该路由组件中引入默认显示的普通组件 bookreader.vue
 import Bookreader from "../../components/ebook/Bookreader.vue";
 import { mapState } from 'vuex'
@@ -55,7 +57,7 @@ export default {
   },
   mounted() {
      if(this. is_weixin()){
-       alert('由于微信内置浏览器的安全政策，该站点不兼容微信端，请单击右上角以其他浏览器查看!')
+       alert('由于微信内置浏览器的安全政策,该站点不兼容微信端,请单击右上角以其他浏览器查看!')
      }
   },
   methods:{

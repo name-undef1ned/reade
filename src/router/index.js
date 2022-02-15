@@ -9,7 +9,8 @@ export default new router({
         {
             // 一旦进入项目根目录就重定向至项目入口组件ebook的index.vue
             path:'/',
-            redirect:'/ebook/chinesebook|%E7%B1%B3%E6%A0%BC%E5%B0%94%E8%A1%97',
+            redirect:'/store',
+            // redirect:'/ebook/chinesebook|%E7%B1%B3%E6%A0%BC%E5%B0%94%E8%A1%97',
             // component:()=>import('../App.vue')
         },
         {
@@ -31,6 +32,19 @@ export default new router({
                 },
             ]
 
+        },
+        {
+            path:'/store',
+            // 自动重定向到home组件
+            redirect:'/store/home',
+            // 箭头函数加动态引入
+            component:()=>import('../pages/store/index.vue'),
+            children:[
+                {
+                    path:'home',
+                    component:()=>import('../pages/store/storehome.vue')
+                }
+            ]
         }
     ]
 })

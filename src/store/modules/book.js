@@ -169,8 +169,6 @@ export default{
                 style:{
                     body:{
                         'color':'#000',
-                        // 不能是-image 不然一直存在
-                        // 'background': "url(https://static.iamflame.top/2021/12/26/p243944566.jpg)"
                         'background': "#7fe69d"
                     }
                 }

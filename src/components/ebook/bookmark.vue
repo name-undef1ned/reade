@@ -19,7 +19,7 @@
 <script>
 
 import { mapState,mapMutations } from 'vuex'
-import {getmarklist,setmarklist} from '../utils/localstorage'
+import {getmarklist,setmarklist} from '../../utils/localstorage'
 
 export default {
 name:"bookmark",
@@ -236,7 +236,7 @@ beforeDestroy() {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/styles/global.scss';
+@import '../../assets/styles/global.scss';
 
 .marktrue{
  border-color: #295a9d #295a9d transparent #295a9d!important;

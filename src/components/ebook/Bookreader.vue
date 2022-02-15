@@ -189,12 +189,9 @@ const vm = {
         this.firstoffsetX=e.changedTouches[0].screenX;
       }
       e.stopPropagation();
-     
-      
-
-  
-    
-      })
+      // e.preventDefault();
+   
+      }, { passive: true })
       this.rendition.on('touchend',(e)=>{
         this.touchcount=0;
         this.HASTOUCHUP(true)
@@ -251,6 +248,7 @@ const vm = {
         restore: true,
         // 翻页动画字段
         flow: "paginated",
+        // flow: "scroll",
         manager: "continuous",
         snap: true,
       });

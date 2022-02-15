@@ -3,7 +3,8 @@ import Vuex from 'vuex'
 
 // 导入book模块
 import book from './modules/book'
-
+// 导入书城模块
+import  storehome  from './modules/storehome'
 // 初始化store之前就必须注册，因为import提升的原因无法灵活控制执行顺序，所以将注册逻辑写在store文件中
 Vue.use(Vuex)
 
@@ -11,6 +12,7 @@ Vue.use(Vuex)
  const store =new Vuex.Store({
  modules:{
     book,
+    storehome
  }
    
  })

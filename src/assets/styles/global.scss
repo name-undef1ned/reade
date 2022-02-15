@@ -30,6 +30,33 @@ $Basefontsize:37.5;
     align-items: center;
 }
 
+@mixin abscenter(){
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+}
+@mixin columnCenter(){
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin top {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+@mixin left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 
 @mixin Setfontfamily{
      font-family: 'Oooh Baby', cursive; 
@@ -190,3 +217,66 @@ margin-bottom: 10px;
 }
  
 
+
+
+
+// 书城公共样式
+// searchbar组件title
+.title-move-enter,.title-move-leave-to{
+  transform: translate3d(0,px2rem(10),0);
+  opacity: 0;
+}
+//  离开起点后的状态和元素最终状态 。但是元素最终状态会被元素本身的样式类覆盖
+.title-move-enter-to,.title-move-leave{
+  transform: translate3d(0,0,0);
+  opacity: 1;
+}
+//  整个过程
+.title-move-enter-active,.title-move-leave-active{
+ transition:all .3s linear;
+ -ms-transition:all 0.3s ease;/*IE*/
+ -moz-transition: all 0.3s ease; /* Firefox 4 */
+ -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
+ -o-transition: all 0.3s ease; /* Opera */
+
+}
+
+// homecontent-searchlist组件
+.searchlist-enter{
+  transform: translate3d(0,px2rem(30),0);
+  opacity: 0;
+}
+//  离开起点后的状态和元素最终状态 。但是元素最终状态会被元素本身的样式类覆盖
+.searchlist-enter-to{
+  transform: translate3d(0,0,0);
+  opacity: 1;
+}
+//  整个过程
+.searchlist-enter-active{
+ transition:all .3s linear;
+ -ms-transition:all 0.3s ease;/*IE*/
+ -moz-transition: all 0.3s ease; /* Firefox 4 */
+ -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
+ -o-transition: all 0.3s ease; /* Opera */
+
+}
+
+// 返回顶部按钮
+.backtop-enter,.backtop-leave-to{
+  transform: translate3d(0,px2rem(40),0);
+  opacity: 0;
+}
+//  离开起点后的状态和元素最终状态 。但是元素最终状态会被元素本身的样式类覆盖
+.backtop-enter-to,.backtop-leave{
+  transform: translate3d(0,0,0);
+  opacity: 1;
+}
+//  整个过程
+.backtop-enter-active,.backtop-leave-active{
+ transition:all .3s linear;
+ -ms-transition:all 0.3s ease;/*IE*/
+ -moz-transition: all 0.3s ease; /* Firefox 4 */
+ -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
+ -o-transition: all 0.3s ease; /* Opera */
+
+}
