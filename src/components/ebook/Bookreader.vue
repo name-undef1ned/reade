@@ -41,8 +41,8 @@ const vm = {
   },
   data() {
     return {
+      // nginxBaseUrl: "http://47.99.166.157/",
       nginxBaseUrl: "http://192.168.3.70:8081/",
-      // nginxBaseUrl:'http://172.20.10.2:8081/',
       book: {},
       cursorefn: {},
       isshowwindowchangetip: false,
@@ -228,6 +228,7 @@ const vm = {
         "|",
         "/"
       )}.epub`;
+      console.log(this.filename,temp);
       // 2epub依据电子书路径实例化一个book对象
       this.book = new Epub(temp, {
         openAs: "epub",

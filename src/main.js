@@ -21,8 +21,8 @@ Vue.use(element)
 // 组件引入区
 import App from './App.vue'
 
-// 引入mock
-import './mock/index';
+// 不全局引入mock 资源下载类页面是用不了mock的数据
+// import './mock/index';
 
 
 // 禁用生产提示

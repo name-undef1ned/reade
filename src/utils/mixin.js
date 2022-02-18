@@ -105,9 +105,30 @@ export default {
 
 export const storehomemixin={
     computed:{
-        ...mapState('storehome',['offsetY','issearch','cardvisible','homebooklist'])
+        ...mapState('storehome',['offsetY','issearch','cardvisible','homebooklist','historyclick'])
     },
     methods:{
-        ...mapMutations('storehome',['SETOFFSETY','SETISSEARCH','SETCARDVISIBLE','SETHOMEBOOKLIST'])
+        ...mapMutations('storehome',['SETOFFSETY','SETISSEARCH','SETCARDVISIBLE','SETHOMEBOOKLIST','SETHIESTORYCLICK']),
+        // 每本图书跳转到图书详情的方法
+        showbookdetail(book){
+            this.$router.push({
+                path:'/store/detail',
+                query:{
+                    fileName:book.fileName,
+                    category:book.categoryText
+                }
+            })
+        },
+        // 查看全部和搜索的方法
+        showlist(categoryText,keyword){
+            console.log('开始跳转list',categoryText,keyword);
+            this.$router.push({
+              path:'/store/list',
+              query:{
+                categoryText,
+                keyword
+            }
+            })
+          }
     }
 }

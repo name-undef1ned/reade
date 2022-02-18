@@ -1,8 +1,13 @@
 // 书城汇总路由组件
 <template>
   <div class="store-wraper">
-      <!-- <h1>书城页面</h1> -->
-      <router-view></router-view>
+    <transition name="pagetoogle">
+      <!-- 指定detail页面不缓存 -->
+      <keep-alive exclude="storedetail,storelist">
+        <router-view></router-view>
+      </keep-alive>
+    
+    </transition>
   </div>
 </template>
 

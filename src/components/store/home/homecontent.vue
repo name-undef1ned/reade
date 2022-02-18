@@ -5,9 +5,8 @@
     <loading class="home-loading" v-if="!$store.state.storehome.homebooklist" :backgroundColor="'white'" :top="'30%'" :left="'50%'"></loading>
     <div class="resource-wraper" v-else>
       <div class="banner-wraper" :style="{backgroundImage:`url(https://picb8.photophoto.cn/39/917/39917738_1.jpg)`}"></div>
-    <!-- $store.state.storehome.homebooklist.banner -->
       <guess-you-like :likelist="$store.state.storehome.homebooklist.guessYouLike"></guess-you-like>
-      <recommend :data="$store.state.storehome.homebooklist.recommend" :lefttext="'热门推荐'" :righttext="' '"></recommend>
+      <recommend :data="$store.state.storehome.homebooklist.recommend" :lefttext="'热门推荐'" :righttext="''"></recommend>
       <fetured :data="$store.state.storehome.homebooklist.featured"></fetured>
       <div class="catarylist" v-for="(item,index) in $store.state.storehome.homebooklist.categoryList" :key="'catary'+index">
       <recommend :data="item.list" :lefttext="getCategoryName(item.category)" :righttext="'查看全部'"></recommend>
@@ -21,29 +20,46 @@
     </div>
   
     </div>
-    <searchlist v-show="issearch"></searchlist>
+    <keep-alive>
+     <searchlist v-if="issearch"></searchlist>
+    </keep-alive>
   </div>
 </template>
 
 <script>
+// import Vue from 'vue'
 import {storehomemixin} from '../../../utils/mixin'
-import searchlist from './children/searchlist.vue'
-import loading from '../../../components/ebook/Notice/loading.vue'
-import guessYouLike from './children/guessYouLike.vue'
-import recommend from './children/recommend.vue'
-import fetured from './children/fetured.vue'
 import {getCategoryName} from '../../../utils/book'
-import categrise from './children/categrise.vue'
+import loading from '../../../components/ebook/Notice/loading.vue'
+import asyncloading from './children/asyncloading.vue'
+const searchlist = () => ({
+  // 需要加载的组件 (应该是一个 `Promise` 对象)
+  component:import(/*webpackChunkName:'searchlist'*/'./children/searchlist.vue'),
+  // 展示加载时组件的延时时间。默认值是 200 (毫秒)
+  delay: 0,
+  // 如果提供了超时时间且组件加载也超时了，
+  // 则使用加载失败时使用的组件。默认值是：`Infinity`
+  timeout: 2000,
+  // 异步组件加载时使用的组件
+  loading:loading,
+  // 加载失败时使用的组件
+  error:asyncloading
+})
+
 export default {
 name:'homecontent',
 mixins:[storehomemixin],
 components:{
-  searchlist,
   loading,
-  guessYouLike,
-  recommend,
-  fetured,
-  categrise
+  asyncloading,
+  guessYouLike:()=>import(/*webpackChunkName:'guessYouLike'*/'./children/guessYouLike.vue'),
+  recommend:()=>import(/*webpackChunkName:'recommend'*/'./children/recommend.vue'),
+  fetured:()=>import(/*webpackChunkName:'fetured'*/'./children/fetured.vue'),
+  categrise:()=>import(/*webpackChunkName:'categrise'*/'./children/categrise.vue'),
+  searchlist,
+  
+ 
+
 },
 data() {
   return {
@@ -84,12 +100,18 @@ watch:{
      })
     }
   },
-  'offsetY'(newv){
-    if(newv<1500){
-      // this.SETISBACKTOTOP(false)
-    }
-  }
-}
+  // 'offsetY'(newv){
+  //   if(newv<1500){
+  //     // this.SETISBACKTOTOP(false)
+  //   }
+  // }
+},
+activated() {
+   this.$nextTick(()=>{
+       this.$refs.contentwraper.scrollTop=this.$store.state.storehome.offsetY;
+
+     })
+},
 
 }
 </script>

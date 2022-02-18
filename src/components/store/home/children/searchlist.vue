@@ -5,11 +5,11 @@
     <div class="historysearch-wraper">
         <div class="historysearch-title-wraper">
             <span>搜索历史</span>
-            <span>清空</span>
+            <span @click="clearhistory">清空</span>
         </div>
         <div class="historysearch-list-wraper">
             <div class="historysearch-item-wraper" v-for="(item,index) in searchhistory" :key="'historysearch'+index">
-                <span>{{item}}</span>
+                <span @click.stop="clickhistory(item)">{{item}}</span>
             </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
         </div>
     </div> -->
     <p v-if="!$store.state.storehome.homebooklist" >加载中...</p>
-     <recommend :data="$store.state.storehome.homebooklist.recommend" :lefttext="'热门推荐'" :righttext="'换一批'" v-else></recommend>
+     <recommend :data="$store.state.storehome.homebooklist.recommend" :lefttext="'热门推荐'" :righttext="''" v-else></recommend>
 
       <p v-if="!$store.state.storehome.homebooklist" >加载中...</p>
       <guess-you-like :likelist="$store.state.storehome.homebooklist.guessYouLike" v-else></guess-you-like>
@@ -52,6 +52,14 @@ components:{
 },
 computed:{
     ...mapState('storehome',['hotsearch','searchhistory'])
+},
+methods:{
+    clearhistory(){
+        this.$store.commit('storehome/CLEARSEARCHHISTORY')
+    },
+    clickhistory(item){
+        this.$store.commit('storehome/SETHIESTORYCLICK',item)
+    }
 }
 }
 </script>

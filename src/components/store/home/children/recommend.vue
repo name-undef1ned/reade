@@ -3,17 +3,17 @@
 
      <div class="title-wraper">
       <span>{{lefttext}}</span>
-      <span>{{righttext}}</span>
+      <span @click="showlist(getCategoryEnglishName(data[0].category))">{{righttext}}</span>
     </div>
 
     <div class="recommend-list">
-      <div class="recommend-item" v-for="(item, index) in data" :key="index">
+      <div class="recommend-item" :class="{'recommend-item-where3Item':data.length<=3}" v-for="(item, index) in data" :key="index" @click="showbookdetail(item)">
         <div class="img-wrapper">
           <img class="img" :src="item.cover">
         </div>
         <div class="content-wrapper">
           <div class="title title-medium" ref="title">{{item.title}}</div>
-          <div class="num sub-title" ref="num">{{item.readers}}人同时在读</div>
+          <div class="num sub-title" ref="num">{{item.readers?item.readers+'人同时在读':''}}</div>
         </div>
       </div>
     </div>
@@ -21,10 +21,11 @@
 </template>
 
 <script type="text/ecmascript-6">
-
+import {storehomemixin} from '../../../../utils/mixin'
+import {getCategoryEnglishName} from '../../../../utils/book'
 
   export default {
-   
+mixins:[storehomemixin],
     components: {
      name:'recommend'
     },
@@ -32,7 +33,13 @@
       data: Array,
       lefttext:String,
       righttext:String
-    }
+    },
+    methods: {
+           getCategoryEnglishName(category) {
+      return getCategoryEnglishName(category, this);
+    },
+    },
+    
   }
 </script>
 
@@ -73,10 +80,14 @@
       box-sizing: border-box;
       overflow: auto;
       .recommend-item {
-        flex: 0 0 33.33%;
-        width: 33.33%;
+        flex: 0 0 30%;
+        width: 30%;
         padding: 0 px2rem(5);
         box-sizing: border-box;
+        &.recommend-item-where3Item{
+          flex: 0 0 33.3%!important;
+        width: 33.3%!important;
+        }
         .img-wrapper {
           @include center;
           .img {

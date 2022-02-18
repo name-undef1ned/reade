@@ -21,7 +21,7 @@ export default new router({
                 {
                     path:':filename',
                     // 坑：写成了compontent 结果没有正确注册路由-无法执行props，展示是因为该组件也是父子关系
-                    component:()=>import ('../components/ebook/Bookreader.vue'),
+                    component:()=>import (/*webpackChunkName:'router-Bookreader'*/'../components/ebook/Bookreader.vue'),
                     // 即是父子组件又是路由组件 路由组件的props字段失效
                     // props:route => {
                     //     console.log(123);
@@ -42,9 +42,18 @@ export default new router({
             children:[
                 {
                     path:'home',
-                    component:()=>import('../pages/store/storehome.vue')
-                }
+                    component:()=>import(/*webpackChunkName:'router-home'*/'../pages/store/storehome.vue')
+                },
+                {
+                    path:'list',
+                    component:()=>import(/*webpackChunkName:'router-list'*/'../pages/store/storelist.vue')
+                 },
+                 {
+                     path:'detail',
+                     component:()=>import(/*webpackChunkName:'router-detail'*/'../pages/store/storedetail.vue')
+                  }
             ]
         }
+       
     ]
 })

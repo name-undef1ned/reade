@@ -5,7 +5,7 @@
       <span @click="changebooklist">换一批</span>
     </div>
 
-    <div class="book-wraper" v-for="(item,index) in likelistshow" :key="'guesslike'+index">
+    <div class="book-wraper" v-for="(item,index) in likelistshow" :key="'guesslike'+index" @click="showbookdetail(likelist[index])">
          <div class="img-wraper">
             <img :src="likelist[item].cover"/>    
          </div>
@@ -15,7 +15,7 @@
            </div>
            <div class="bottom-wraper">
              <span>{{likelist[item].author}}</span>
-             <span>阅读{{likelist[item].result}}的人也在读</span>
+             <span>根据{{likelist[item].result}}推荐</span>
            </div>
          </div>
     </div>
@@ -23,8 +23,10 @@
 </template>
 
 <script>
+import {storehomemixin} from '../../../../utils/mixin'
 export default {
 name:'guessYouLike',
+mixins:[storehomemixin],
 data() {
   return {
     likelistshow:[0,1,2]

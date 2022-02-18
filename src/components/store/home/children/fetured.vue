@@ -11,7 +11,7 @@
           class="featured-item"
           v-for="(item, index) in data"
           :key="index"
-          
+           @click="showbookdetail(item)"
         >
           <div class="img-wrapper">
             <img class="img" :src="item.cover" />
@@ -33,9 +33,11 @@
 
 <script type="text/ecmascript-6">
 import { getCategoryName } from "../../../../utils/book";
+import {storehomemixin} from '../../../../utils/mixin'
 
 export default {
   name: "fetured",
+mixins:[storehomemixin],
   components: {},
   props: {
     data: Array,

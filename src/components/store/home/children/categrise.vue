@@ -1,12 +1,12 @@
 <template>
   <div class="category">
-       <div class="title-wraper" @Click="showBookList">
+       <div class="title-wraper">
             <span>分类</span>
-            <span>查看全部</span>
+            <span @click="showAllList()">查看全部</span>
         </div>
     <div class="category-list">
-      <div class="category-item-wrapper" v-for="(item, index) in data" :key="index" @click="showBookCategory(item)">
-        <div class="category-item">
+      <div class="category-item-wrapper" v-for="(item, index) in data" :key="index">
+        <div class="category-item" @click="showlist(getCategoryEnglishName(item.category))">
           <div class="content-wrapper">
             <div class="title title-medium">{{getCategoryName(item.category)}}</div>
             <div class="num sub-title-tiny">{{item.num + '本书'}}</div>
@@ -24,11 +24,12 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { getCategoryName } from "../../../../utils/book";
-
+  import { getCategoryName,getCategoryEnglishName} from "../../../../utils/book";
+ import { storehomemixin} from '../../../../utils/mixin'
 
   export default {
       name:'categrise',
+      mixins:[storehomemixin],
     components: {
       
     },
@@ -39,19 +40,19 @@
           getCategoryName(category) {
       return getCategoryName(category, this);
     },
-      showBookCategory(item) {
-        this.$router.push({
-          path: '/book-store/list',
-          query: {
-            category: getCategoryName(item.category),
-            categoryText: this.getCategoryName(item.category)
+         getCategoryEnglishName(category) {
+      return getCategoryEnglishName(category, this);
+    },
+      showAllList(){
+        console.log('全部');
+            this.$router.push({
+              path:'/store/list',
+            })
           }
-        })
-      },
-      showBookList() {
-        this.$router.push('/book-store/list')
-      }
-    }
+    },
+    mounted() {
+      console.log(this.data);
+    },
   }
 </script>
 

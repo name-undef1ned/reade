@@ -15,7 +15,23 @@ export default{
     },
     SETHOMEBOOKLIST(state,newv){
         state.homebooklist=newv;
+    },
+    ADDSEARCHHISTORY(state,newv){
+        if (state.searchhistory.includes(newv)) return
+        if(state.searchhistory.length>=10){
+            state.searchhistory.pop()
+            state.searchhistory.unshift(newv)
+        }else{
+            state.searchhistory.unshift(newv)
+        }
+    },
+    CLEARSEARCHHISTORY(state){
+        state.searchhistory=[]
+    },
+    SETHIESTORYCLICK(state,newv){
+        state.historyclick=newv;
     }
+
     },
     state:{
         // homecontent滚动位置
@@ -39,20 +55,22 @@ export default{
             },
         ],
         // 搜索历史数据
-        searchhistory:new Set([
-            '三体',
-            'javascript高级程序设计(第4版)',
-            '思考快与慢',
-            '原则',
-            'node',
-            '追风筝的少年',
-            '人类简史:从动物到上帝',
-            '金字塔原理:(麦肯锡经典40年培训教材)',
-            '苏世民:我的经验与教训'
-        ]),
+        searchhistory:[
+            '番茄工作法图解 v1.0',
+            '米格尔街',
+            '诡案追踪',
+            '说服力',
+            '围城-钱钟书',
+            '我的大明王朝',
+            '论语、老子、孟子、庄子、孙子兵法',
+            '羊皮卷',
+            '鬼吹灯（完美全集）'
+        ],
         // 随机推荐组件card是否显示
         cardvisible:false,
         homebooklist:null,
+        historyclick:''
+       
        
 
     }

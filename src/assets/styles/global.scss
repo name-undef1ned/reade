@@ -58,6 +58,12 @@ $Basefontsize:37.5;
 }
 
 
+@mixin right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 @mixin Setfontfamily{
      font-family: 'Oooh Baby', cursive; 
     // font-family: 'Ubuntu Mono', monospace;
@@ -279,4 +285,45 @@ margin-bottom: 10px;
  -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
  -o-transition: all 0.3s ease; /* Opera */
 
+}
+
+
+// 返回顶部按钮
+.pagetoogle-enter{
+  transform: translate3d(100%,0,0);
+  opacity: 0;
+  z-index: 99999;
+}
+//  离开起点后的状态和元素最终状态 。但是元素最终状态会被元素本身的样式类覆盖
+.pagetoogle-enter-to{
+  transform: translate3d(0,0,0);
+  opacity: 1;
+  z-index: 99999;
+
+}
+//  整个过程
+.pagetoogle-enter-active{
+ transition:all .3s linear;
+ -ms-transition:all 0.3s ease;/*IE*/
+ -moz-transition: all 0.3s ease; /* Firefox 4 */
+ -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
+ -o-transition: all 0.3s ease; /* Opera */
+
+}
+
+.pagetoogle-leave-to{
+  transform: translate3d(0,80%,0);
+  opacity: 0;
+}
+.pagetoogle-leave{
+  transform: translate3d(0,0,0);
+  opacity: 1;
+}
+.pagetoogle-leave-active{
+  transition:all .3s ease;
+  -ms-transition:all 0.3s ease;/*IE*/
+  -moz-transition: all 0.3s ease; /* Firefox 4 */
+  -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
+  -o-transition: all 0.3s ease; /* Opera */
+ 
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="title-wraper" >
       <!-- left right div为一级flex，right为二级flex 所以这样搭建结构 -->
-      <div class="left"> 
+      <div class="left" @click="back"> 
          <span class="icon-back iconfont"></span>
       </div>
       <div class="right">
@@ -20,7 +20,12 @@
 
 <script>
 export default {
-name:'Booktitle'
+name:'Booktitle',
+methods: {
+      back(){
+    this.$router.go(-1)
+  },
+},
 }
 </script>
 

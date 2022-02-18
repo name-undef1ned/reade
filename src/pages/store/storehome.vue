@@ -10,7 +10,8 @@
 import searchbar from '../../components/store/home/searchbar.vue'
 import homecontent from '../../components/store/home/homecontent.vue'
 import card from '../../components/store/home/children/card.vue'
-import {home} from '../../API/store'
+import {home,home2} from '../../API/store'
+
 export default {
 name:'storehome',
 components:{
@@ -24,6 +25,17 @@ data() {
     }
 },
 mounted() {
+
+    // const list=require('../../mock/bookList');
+    // console.log(JSON.stringify(list));
+//      home2().then(res=>{
+//    console.log(typeof res.data);
+//  }).catch(err=>{
+//    console.log(err);
+//  })
+
+
+
 home().then(res=>{
     if(res.status==200){
         this.randomObjlist=res.data.random;

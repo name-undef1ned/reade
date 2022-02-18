@@ -19,7 +19,7 @@
         <div class="search-blank" :class="{'showblank':!titlevisbale}"></div>
         <div class="search-box-wraper">
             <span class="icon-search iconfont"></span>
-            <input type="text" @focus="gosearch" placeholder="搜索书籍" />
+            <input type="text" ref="searchinput" v-model="searchText" @focus="gosearch" placeholder="搜索书籍" @input="inputing" @keyup.enter="inputdone"/>
         </div>
       </div>
       
@@ -36,6 +36,7 @@ mixins:[storehomemixin],
 data() {
   return {
     titlevisbale:true,
+    searchText:''
   }
 },
 watch:{
@@ -45,6 +46,10 @@ watch:{
     }else{
       this.hidetitle()
     }
+  },
+  historyclick(newv){
+    this.searchText=newv;
+    this.$refs.searchinput.focus()
   }
 },
 methods: {
@@ -57,7 +62,27 @@ methods: {
   gosearch(){
     this.SETISSEARCH(true)
   },
+  inputing(){
+console.log(111);
+  },
+  inputdone(){
+    console.log('开始跳转list');
+    // 1添加搜索历史
+    this.$store.commit('storehome/ADDSEARCHHISTORY',this.searchText)
+    // 2跳转list页面
+    this.$router.push({
+      path:'/store/list',
+      query:{
+        // query prames只能传递字符串数据类型
+        // categoryText:false,
+        keyword:this.searchText
+    }
+    })
+      
+          
+  },
   backhome(){
+    this.searchText='';
     this.SETISSEARCH(false)
   },
   showcard(){

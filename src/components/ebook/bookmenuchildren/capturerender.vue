@@ -12,7 +12,7 @@
               <span class="iconfont icon-back" v-if="item.subitems[0]" @click.stop="isshowson"></span>
               </div>
                     <div class="son" v-if="item.subitems[0]">
-                        <capturerender :arr="item.subitems"></capturerender>
+                        <capturerender :arr="item.subitems" :allowdisplay="allowdisplay"></capturerender>
                     </div>
             </li>
           </div>
@@ -24,7 +24,13 @@ import { mapState } from "vuex";
 
 export default {
 name:'capturerender',
-props:['arr'],
+props:{
+  arr:Array,
+   allowdisplay:{
+     type:Boolean,
+     default:true
+   }
+},
 mixins: [mixin],
 computed:{
     ...mapState("book", ["navigation", "book"]),
@@ -63,6 +69,7 @@ methods: {
    
     },
     jumpandhide(href){
+      if(this.allowdisplay==false){return}
  this.$store.state.book.rendition.display(href).then(() => {
         // 更新当前章节信息
         // console.log(this);
