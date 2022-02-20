@@ -10,6 +10,15 @@
       :message="'检测到窗口变化,正在重新加载图书...'"
     >
     </loading>
+      <loading
+      v-if="!loadedsuccess"
+      :right="'35%'"
+      :top="'25%'"
+      :color="'black'"
+      :backgroundColor="'rgba(135, 206, 235, 100%)'"
+      :message="'资源较大,正在玩命加载图书,请耐心等待...'"
+    >
+    </loading>
   </div>
 </template>
 
@@ -48,7 +57,8 @@ const vm = {
       isshowwindowchangetip: false,
       hasdisplay: false,
       // 计数器
-      touchcount:0
+      touchcount:0,
+      loadedsuccess:false
     
     };
   },
@@ -260,6 +270,7 @@ const vm = {
       // 4显示&目录舔砖 调用reandy钩子 如果book生成就返回正确promise
       this.book.ready
         .then(() => {
+            this.loadedsuccess=true;
           let _that = this;
           // 重新渲染完毕 关闭提示
           // this.isshowwindowchangetip = false;
@@ -307,7 +318,14 @@ const vm = {
             // 初始化存储当前章节信息
           // this.SETNOWSECTION(this.booksections[this.book.rendition.currentLocation().end.index]);
           // console.log(this.booksections,this.book.rendition.currentLocation().end.index);
-          this.SETNOWSECTION(this.booksections[this.book.rendition.currentLocation().end.index]);
+          try {
+            this.SETNOWSECTION(this.booksections[this.book.rendition.currentLocation().end.index]);
+            
+          } catch (error) {
+            
+          }
+      
+
         })
 
       // 判断是移动端还是pc端"pc->单击左侧上一页 右侧下一页 中间切换显示，移动端->翻页由epub控制 点击不滑动切换
@@ -424,6 +442,12 @@ const vm = {
   updated() {
     console.log("updated");
   },
+   // 阅读器组件样式独立，在退出前将项目样式置为默认
+  beforeDestroy() {
+   // 全局主题生效
+        this.setglobalstyle('默认');
+
+  },
   async mounted() {
     // 该事件向实例添加了book rendition大小 为异步的，下面同步代码访问不到 -需要保证同步执行  所以那这个函数放在beforemount钩子中-不行 beforemount不能提升他的优先级
     // 只不过是在较早的before时机把这个异步函数放在callbackstack中。在callstack中他还是在最后面  只能让init返回promise或者
@@ -431,7 +455,7 @@ const vm = {
     await this.setfilename(this.$route.params.filename).then((res) => {
       // 数据处理规则很可能也是异步的 所以这里设计成可以链式调用
       this.initbook();
-      this.initrendition();
+      this.initrendition()
       //  样式背景色功能-注册函数调用
       this.registerTheme();
       this.parsebook();
@@ -439,7 +463,6 @@ const vm = {
       // 调用书签功能的手势方法
       this.setbookoffsetY();
     })
-
     // 字体大小功能监听兄弟组件设置的fontsize变化做出对应字号设置
     this.$watch(
       function () {
@@ -473,8 +496,6 @@ const vm = {
     );
 
     this.windowchange();
-
-
  
   },
   watch: {},

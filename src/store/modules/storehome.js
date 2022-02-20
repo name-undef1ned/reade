@@ -30,30 +30,29 @@ export default{
     },
     SETHIESTORYCLICK(state,newv){
         state.historyclick=newv;
+    },
+    SETISEDITMODE(state,newv){
+        state.iseditmode=newv;
+    },
+    SETTITLEVISBLE(state,newv){
+        state.shelftitlevisble=newv;
+    },
+    SETSHELFLIST(state,newv){
+        state.shelflist=newv;
+    },
+    ADDSHELFSELECTED(state,newv){
+    state.shelfselected.push(newv)
+    },
+    DELSHELFSELECTED(state,newv){
+    state.shelfselected.splice(state.shelfselected.indexOf(newv),1)
     }
-
     },
     state:{
+        // 书城数据
         // homecontent滚动位置
         offsetY:0,
         // 用户单击search？
         issearch:false,
-        // 热门搜索数据
-        hotsearch:[
-            {
-                bookname:'米格尔街',
-                searchtimes:999
-            },{
-                bookname:'番茄工作法图解',
-                searchtimes:555
-            },{
-                bookname:'围城',
-                searchtimes:1500
-            },{
-                bookname:'三体',
-                searchtimes:10000
-            },
-        ],
         // 搜索历史数据
         searchhistory:[
             '番茄工作法图解 v1.0',
@@ -69,7 +68,12 @@ export default{
         // 随机推荐组件card是否显示
         cardvisible:false,
         homebooklist:null,
-        historyclick:''
+        historyclick:'',
+        // 书架相关数据
+        iseditmode:false,//是否进入编辑模式
+        shelflist:[],//书架图书列表
+        shelfselected:[],//书架图书选中列表
+        shelftitlevisble:true//书架搜索框可见？
        
        
 

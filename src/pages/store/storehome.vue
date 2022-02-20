@@ -26,7 +26,7 @@ data() {
 },
 mounted() {
 
-    // const list=require('../../mock/bookList');
+    // const list=require('../../mock/bookShelf');
     // console.log(JSON.stringify(list));
 //      home2().then(res=>{
 //    console.log(typeof res.data);

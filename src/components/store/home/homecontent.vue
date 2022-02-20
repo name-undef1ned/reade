@@ -4,7 +4,7 @@
 
     <loading class="home-loading" v-if="!$store.state.storehome.homebooklist" :backgroundColor="'white'" :top="'30%'" :left="'50%'"></loading>
     <div class="resource-wraper" v-else>
-      <div class="banner-wraper" :style="{backgroundImage:`url(https://picb8.photophoto.cn/39/917/39917738_1.jpg)`}"></div>
+      <div class="banner-wraper" :style="{height:relHeight,backgroundImage:`url(https://tse1-mm.cn.bing.net/th/id/R-C.c138c44f713c83fc62fbd6126714f635?rik=86a8Xp%2bfV9l1Ag&riu=http%3a%2f%2fimgs.aixifan.com%2flive%2f1483602000741%2f1483602000741.jpg&ehk=D3HdmnwjDqqO2RsY9LTs%2fvNHShXPyEpfn40UinfK03A%3d&risl=&pid=ImgRaw&r=0)`}"></div>
       <guess-you-like :likelist="$store.state.storehome.homebooklist.guessYouLike"></guess-you-like>
       <recommend :data="$store.state.storehome.homebooklist.recommend" :lefttext="'热门推荐'" :righttext="''"></recommend>
       <fetured :data="$store.state.storehome.homebooklist.featured"></fetured>
@@ -61,10 +61,20 @@ components:{
  
 
 },
+computed:{
+   relHeight:{
+        immediate:true,
+        get(){
+            console.log(this.windowwidth);
+            return (this.windowwidth/100*27.33)*1.2+'px'
+        }
+    }
+},
 data() {
   return {
     reltivetop:true,
-    homescrollcontent:0
+    homescrollcontent:0,
+    windowwidth:0
   }
 },
 methods: {
@@ -85,7 +95,10 @@ methods: {
   backmove(e){
     this.$refs.backtotop.style.left=`${e.changedTouches[0].clientX}px`
     this.$refs.backtotop.style.top=`${e.changedTouches[0].clientY}px`
-  }
+  },
+  relwindowwidth(){
+    this.windowwidth=window.innerWidth;
+}
   },
 watch:{
   // 当进入searchlist组件就重置滚动条位置为0  并且需要记录homecontent的scrolltop值，切换回来赋值给他
@@ -111,6 +124,21 @@ activated() {
        this.$refs.contentwraper.scrollTop=this.$store.state.storehome.offsetY;
 
      })
+      // resize没触发得手动给
+    this.windowwidth=window.innerWidth;
+     window.addEventListener('resize',this.relwindowwidth)
+},
+mounted() {
+     // resize没触发得手动给
+    this.windowwidth=window.innerWidth;
+    window.addEventListener('resize',this.relwindowwidth)
+},
+beforeDestroyed() {
+window.removeEventListener('resize',this.relwindowwidth);
+},
+deactivated() {
+window.removeEventListener('resize',this.relwindowwidth);
+    
 },
 
 }
@@ -143,14 +171,18 @@ activated() {
         .banner-wraper{
           
           // 不同宽度阶段使用媒体查询设置对应比例的高度 简陋的响应式图片方案
-          @media screen and (min-width: 850px) {
-            height: px2rem(200);
-          }
-            @media screen and (min-width: 1050px) {
-              height: px2rem(230);
-          }
+          // @media screen and (min-width: 650px) {
+          //   height: px2rem(220);
+          // }
+          //   @media screen and (min-width: 900px) {
+          //     height: px2rem(270);
+          // }
+          //   @media screen and (min-width: 1100px) {
+          //     height: px2rem(315);
+          // }
           width: 100%;
           min-width: 300px;
+          min-height: 80px;
           margin: 0 auto;
           height: px2rem(150);
           background-repeat:no-repeat;

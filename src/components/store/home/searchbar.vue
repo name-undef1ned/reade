@@ -83,7 +83,13 @@ console.log(111);
   },
   backhome(){
     this.searchText='';
-    this.SETISSEARCH(false)
+    if(this.$store.state.storehome.issearch){
+      this.SETISSEARCH(false)
+    }else{
+      this.$router.push({
+        path:'/store/shelf'
+      })
+    }
   },
   showcard(){
     this.SETCARDVISIBLE(true)

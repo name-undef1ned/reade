@@ -14,7 +14,7 @@ export function home2(){
       url:`http://192.168.3.70:8081/mock/bookHome.JSON`
   })
 } 
-// detail页面接口
+// 英文书detail页面接口
 export function detail(book) {
     return axios({
       method: 'get',
@@ -26,6 +26,32 @@ export function detail(book) {
       }
     })
   }
+
+  // 中文书detail页面接口
+export function chenesebookdetail(book) {
+  return axios({
+    method: 'get',
+    url:`http://192.168.3.70:8081/mock/bookDetail.JSON`,
+    params: {
+      fileName: book.fileName
+    }
+  })
+}
+
+export function list() {
+  return axios({
+    method: 'get',
+    url:`http://192.168.3.70:8081/mock/bookList.JSON`
+  })
+}
+
+ 
+export function bookShelf() {
+  return axios({
+    method: 'get',
+    url:`http://192.168.3.70:8081/mock/bookShelf.JSON`
+  })
+}
   
 //   export function flatList() {
 //     return axios({
@@ -34,9 +60,3 @@ export function detail(book) {
 //     })
 //   }
   
-  export function list() {
-    return axios({
-      method: 'get',
-      url:`http://192.168.3.70:8081/mock/bookList.JSON`
-    })
-  }

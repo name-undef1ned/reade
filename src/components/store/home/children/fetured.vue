@@ -2,7 +2,7 @@
   <div class="featured">
     <div class="title-wraper">
       <span>精选</span>
-      <span>查看全部</span>
+      <!-- <span></span> -->
     </div>
 
     <div class="featured-list">

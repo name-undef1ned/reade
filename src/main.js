@@ -1,8 +1,7 @@
 import Vue from 'vue'
 // 引入生成好的store实例
 import store from './store/index'
-// 引入vuex辅助函数
-import { mapActions,mapGetters,mapMutations,mapState } from 'vuex'
+
 
 // 引入router
 import router from './router/index'
@@ -17,6 +16,10 @@ import './assets/styles/global.scss'
 import 'element-ui/lib/theme-chalk/index.css'
 import element from './element/index'
 Vue.use(element)
+
+// main.js引入vue-create-api
+import 'vue-create-api'
+import './utils/creatapi'
 
 // 组件引入区
 import App from './App.vue'

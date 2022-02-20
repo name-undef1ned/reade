@@ -112,6 +112,7 @@ justify-content: space-around;
 align-items: flex-start;
 flex-wrap: wrap;
  .fontlist{
+   box-sizing: border-box;
     // position: absolute;
     list-style: none;
       // border-bottom: px2rem(1) solid rgb(244, 244, 244);

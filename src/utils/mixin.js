@@ -1,5 +1,6 @@
 import { mapActions, mapMutations, mapState, mapGetters } from 'vuex'
 import {setlocationcfi} from '../utils/localstorage'
+import {getCategoryEnglishName} from '../utils/book'
 export default {
     computed: {
         ...mapState("book", [
@@ -115,7 +116,7 @@ export const storehomemixin={
                 path:'/store/detail',
                 query:{
                     fileName:book.fileName,
-                    category:book.categoryText
+                    category:getCategoryEnglishName(book.category)
                 }
             })
         },
@@ -130,5 +131,17 @@ export const storehomemixin={
             }
             })
           }
+    }
+}
+
+
+
+export const storeshelfmixin={
+    computed:{
+        ...mapState('storehome',['iseditmode','shelflist','shelfselected','shelftitlevisble'])
+    },
+    methods:{
+        ...mapMutations('storehome',['SETISEDITMODE','SETTITLEVISBLE','SETSHELFLIST','ADDSHELFSELECTED','DELSHELFSELECTED']),
+     
     }
 }

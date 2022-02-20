@@ -23,7 +23,7 @@
           <span>{{randomObj.author}}</span>
       </div>
 
-      <div class="readnow-wraper">
+      <div class="readnow-wraper" @click="readnow">
         <span>立即阅读</span>
       </div>
 
@@ -31,7 +31,7 @@
     </div>
 
 
-    <div class="close" @click="hidecard">
+    <div class="close"  @click="hidecard">
       <span class="iconfont icon-close-line"></span>
     </div>
   </div>
@@ -124,6 +124,12 @@ export default {
   },
   mixins: [storehomemixin],
   methods: {
+    readnow(){
+            this.hidecard();
+            this.$router.push({
+              path: `/ebook/${this.randomObj.categoryText}|${this.randomObj.fileName}`
+            })
+    },
     hidecard() {
       this.SETCARDVISIBLE(false);
     },
@@ -185,6 +191,7 @@ export default {
   mounted() {
     
     this.randomObj=this.randomObjlist[Math.floor(Math.random() * this.randomObjlist.length)]
+    console.log(this.randomObj);
   },
   watch:{
   'times':{

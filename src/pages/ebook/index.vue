@@ -57,7 +57,7 @@ export default {
   },
   mounted() {
      if(this. is_weixin()){
-       alert('由于微信内置浏览器的安全政策,该站点不兼容微信端,请单击右上角以其他浏览器查看!')
+       alert('由于微信内置浏览器的安全政策,阅读功能不兼容微信端,请单击右上角以其他浏览器使用该功能!')
      }
   },
   methods:{
@@ -92,6 +92,8 @@ export default {
 @import '../../assets/styles/global.scss';
 .router-reader-wraper{
   position: absolute;
+  box-sizing: border-box;
+  padding-bottom: px2rem(10);
   top: 0;
   left: 0;
   width: 100%;

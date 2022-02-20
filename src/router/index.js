@@ -36,7 +36,7 @@ export default new router({
         {
             path:'/store',
             // 自动重定向到home组件
-            redirect:'/store/home',
+            redirect:'/store/shelf',
             // 箭头函数加动态引入
             component:()=>import('../pages/store/index.vue'),
             children:[
@@ -51,7 +51,11 @@ export default new router({
                  {
                      path:'detail',
                      component:()=>import(/*webpackChunkName:'router-detail'*/'../pages/store/storedetail.vue')
-                  }
+                  },
+                  {
+                    path:'shelf',
+                    component:()=>import(/*webpackChunkName:'router-shelf'*/'../pages/store/storeshelf.vue')
+                 }
             ]
         }
        

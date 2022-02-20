@@ -5,7 +5,7 @@
       <span @click="changebooklist">换一批</span>
     </div>
 
-    <div class="book-wraper" v-for="(item,index) in likelistshow" :key="'guesslike'+index" @click="showbookdetail(likelist[index])">
+    <div class="book-wraper" v-for="(item,index) in likelistshow" :key="'guesslike'+index" @click="showbookdetail(likelist[item])">
          <div class="img-wraper">
             <img :src="likelist[item].cover"/>    
          </div>

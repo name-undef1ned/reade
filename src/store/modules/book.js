@@ -169,6 +169,7 @@ export default{
                 style:{
                     body:{
                         'color':'#000',
+                        // 'background': "#b8d0b6"
                         'background': "#7fe69d"
                     }
                 }
