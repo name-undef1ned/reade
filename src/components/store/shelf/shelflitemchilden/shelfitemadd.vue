@@ -25,6 +25,8 @@ export default {
   height: 100%;
   box-sizing: border-box;
   border: 1px dashed #ccc;
+  background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+  opacity: 0.7;
   @include center;
   span{
     font-size: px2rem(40);

@@ -1,7 +1,7 @@
 <template>
   <div class="shelfitem-wraper" @click="showwitch(data.type)">
       <!-- 动态组件 根据父组件传的数据动态引入组件 -->
-      <component :is="whtchcomponent" :data="data" class="boxshdow" :class="{'editmode-category':data.type==2&&iseditmode}"></component>
+      <component :is="whtchcomponent" :data="data" class="boxshdow"></component>
       <span class="iconfont icon-check1" :class="{'isselcted':isselcted}" v-if="data.type==1&&iseditmode"></span>
   </div>
 </template>
@@ -18,7 +18,7 @@ data() {
     return {
         shelfitemimage,
         shelfitemcategory,
-        isselcted:false
+        // isselcted:false
     }
 },
 methods:{
@@ -44,14 +44,19 @@ methods:{
     },
     bookselcted(){
         if(this.data.type==1){
-        this.isselcted=!this.isselcted;
-        this.isselcted?this.ADDSHELFSELECTED(this.data.fileName):this.DELSHELFSELECTED(this.data.fileName)
+        this.isselcted==false?this.ADDSHELFSELECTED(this.data.title):this.DELSHELFSELECTED(this.data.title)
         }
     }
 },
 computed:{
     whtchcomponent(){
         return this.data.type==1?shelfitemimage:(this.data.type==2?shelfitemcategory:shelfitemadd)
+    },
+     isselcted:{
+        immediate:true,
+        get(){
+        if(this.shelfselected.indexOf(this.data.title)>=0){return true}else{return false}
+        }
     }
 },
 props:{
@@ -71,9 +76,7 @@ props:{
     .boxshdow{
         box-shadow: px2rem(2) px2rem(2) px2rem(6) px2rem(2) rgba(200,200,200,.4);
     }
-    .editmode-category{
-        opacity: .5;
-    }
+  
 position: relative;
     span{
         display:block;

@@ -1,15 +1,21 @@
 <template>
-  <div class="shelflist-wraper">
-   <div class="item-wraper" v-for="(item,index) in shelflist" :key="'shelflistitem'+index">
-       <shelfitem :data="item"  :style="{height:relHeight}" ></shelfitem>
+  <div class="shelflist-wraper" :class="{'wheniseditmode':iseditmode}">
+      
+      <transition-group name="shelflist" tag="div" id="tralist">
+
+   <div class="item-wraper" :key="item.id"  v-for="(item) in shelflist" v-show="item.isshow"  :class="{'editmode-category':item.type==2&&iseditmode}">
+       <shelfitem :data="item"  :style="{height:relHeight}"></shelfitem>
        <div class="item-title-wraepr">
        <span>{{item.title}}</span>
        </div>
    </div>
    
-   <div class="item-wraper">
+   <div class="item-wraper" key="item-wraper">
        <shelfitemadd :style="{height:relHeight}"></shelfitemadd>
    </div>
+      </transition-group>
+
+   <shelflistpanel></shelflistpanel>
   </div>
 </template>
 
@@ -43,7 +49,8 @@ methods: {
 },
 components:{
     shelfitem,
-    shelfitemadd
+    shelfitemadd,
+    shelflistpanel:()=>import(/*webpackChunkName:'shelf-list-panel' */'./shelflistpanel.vue')
 },
 // 因为销毁前或者退出前都要解除事件，只能都给
 activated() {
@@ -69,21 +76,45 @@ window.removeEventListener('resize',this.relwindowwidth);
 
 <style lang="scss" scoped>
 @import '../../../assets/styles/global.scss';
-
+.wheniseditmode{
+height: calc(100% - px2rem(174))!important;
+}
+.editmode-category{
+        opacity: .4;
+    }
    .shelflist-wraper{
         width: 100%;
         height: calc(100% - px2rem(109));
         box-sizing: border-box;
-        padding: 0 px2rem(12);
-        overflow: auto;
         position: absolute;
-        top: px2rem(109);
+        padding: 0 px2rem(12);
         left: 0;
+        top: px2rem(109);
+        // overflow: auto;
+        // display: flex;
+        // flex-wrap: wrap;
+        // justify-content: flex-start;
+        // align-items: flex-start;
+        // align-content: flex-start;
+        // font-size: px2rem(10);
+        #tralist{
+        width: 100%;
+        height: 100%;
+       overflow: auto;
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
         align-items: flex-start;
+        align-content: flex-start;
         font-size: px2rem(10);
+.shelflist-move{
+    // display: none;
+transition: transform 1s ease;
+}
+.shelflist-leave-active{
+    display: none;
+    // position: absolute;
+}
         .item-wraper{
         flex: 0 0 33.33%;
         width: 33.33%;
@@ -104,5 +135,9 @@ window.removeEventListener('resize',this.relwindowwidth);
         margin-top: px2rem(7);
         }
         }
+
+   }
+
+
     }
 </style>

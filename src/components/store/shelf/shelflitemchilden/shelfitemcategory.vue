@@ -42,7 +42,7 @@ export default {
       box-sizing: border-box;
       opacity: 1;
       &.is-edit {
-        opacity: .5;
+        opacity: .2;
       }
       .shelf-category-item {
         flex: 0 0 33.33%;

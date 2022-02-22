@@ -2,7 +2,6 @@
   <div class="guessyoulike-wraper">
     <div class="title-wraper">
       <span>猜你喜欢</span>
-      <span @click="changebooklist">换一批</span>
     </div>
 
     <div class="book-wraper" v-for="(item,index) in likelistshow" :key="'guesslike'+index" @click="showbookdetail(likelist[item])">
@@ -18,6 +17,11 @@
              <span>根据{{likelist[item].result}}推荐</span>
            </div>
          </div>
+    </div>
+
+    <div class="guessyoulike-menu-wraper">
+      <span @click="changebooklist">换一批</span>
+
     </div>
   </div>
 </template>
@@ -79,10 +83,7 @@ mounted() {
       font-size: px2rem(20);
 
     }
-    :nth-child(2){
-      font-size: px2rem(15);
-      color: #87a9cd;
-    }
+ 
   }
 
   .book-wraper{
@@ -159,5 +160,21 @@ mounted() {
       }
     }
   }
-}
+
+  .guessyoulike-menu-wraper{
+    background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+     width: 100%;
+        height: px2rem(50);
+        border-radius: px2rem(14);
+      overflow: hidden;
+        //  background:linear-gradient(to right,#3d94fe,#59bae9);
+         text-align: center;
+         line-height:120%;
+          span{
+        display: block;
+        font-size: px2rem(17);
+        font-weight: bold;
+        color: black;
+      }
+}}
 </style>

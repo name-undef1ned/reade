@@ -20,6 +20,8 @@
         <div class="search-box-wraper">
             <span class="icon-search iconfont"></span>
             <input type="text" ref="searchinput" v-model="searchText" @focus="gosearch" placeholder="搜索书籍" @input="inputing" @keyup.enter="inputdone"/>
+            <span class="iconfont icon-close-circle-fill" v-show="searchText" @click="cleartext"></span>
+       
         </div>
       </div>
       
@@ -53,6 +55,9 @@ watch:{
   }
 },
 methods: {
+   cleartext(){
+         this.searchText='';
+    },
   showtitle(){
     this.titlevisbale=true;
   },
@@ -202,6 +207,10 @@ console.log(111);
           &::-webkit-input-placeholder{
                color: #7e8186;
           }
+        }
+            .icon-close-circle-fill{
+            font-size: px2rem(20);
+            color: rgba($color: #706060, $alpha: 0.8);
         }
       }
 }

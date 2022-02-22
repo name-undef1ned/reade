@@ -49,7 +49,7 @@
 
   .toast-bg {
     position: absolute;
-    top: 50%;
+    top: 30%;
     left: 50%;
     margin: 0 0 0 -50%;
     z-index: 2500;
@@ -60,8 +60,9 @@
       line-height: px2rem(20);
       padding: px2rem(10) px2rem(20);
       box-sizing: border-box;
-      background: #ccc;
-      border-radius: px2rem(10);
+ background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.15) 100%), radial-gradient(at top center, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.40) 120%) #989898; background-blend-mode: multiply,multiply;
+   background-image: linear-gradient(to top, #5ee7df 0%, #b490ca 100%);
+    border-radius: px2rem(10);
       font-size: px2rem(14);
       color: white;
       .toast {

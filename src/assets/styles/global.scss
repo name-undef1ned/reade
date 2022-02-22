@@ -5,6 +5,9 @@
 // css模块化引入  css模块化引入必须加上分号
 @import './reset.scss';
 
+$color-pink: rgb(255, 102, 159);
+
+
 // 声明一个scss变量
 // 假定屏幕为37.5，随着设计稿项目要求随意调整
 $Basefontsize:37.5;
@@ -20,6 +23,29 @@ $Basefontsize:37.5;
 
 @function px2rem($px){
 @return math.div($px,$Basefontsize) + rem;
+}
+
+// 后追加dom提到全局样式文件生效
+
+.shelfpanel-popup-props-html{
+  font-size: px2rem(12);
+  font-weight: bold;
+  display: inline-block;
+  max-width: 30%;
+  min-width: px2rem(17);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family:'cursive,auto,monospace';
+  color: #2abbe7;
+}
+
+.shelfsearch-tip-toast{
+  font-size: px2rem(20);
+  font-weight: bold;
+  display: inline-block;
+  font-family:'cursive,auto,monospace';
+  color: #2abbe7;
 }
 
 // 混入指令 使用include引入该指令
@@ -215,7 +241,7 @@ margin-bottom: 10px;
 }
 //  整个过程
 .fade-enter-active,.fade-leave-active{
- transition:all .3s linear;
+ transition:all .2s ease;
  -ms-transition:all 0.3s ease;/*IE*/
  -moz-transition: all 0.3s ease; /* Firefox 4 */
  -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
@@ -325,6 +351,21 @@ margin-bottom: 10px;
   -moz-transition: all 0.3s ease; /* Firefox 4 */
   -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
   -o-transition: all 0.3s ease; /* Opera */
- 
+
 }
 
+.popup-slide-up-enter, .popup-slide-up-leave-to {
+  transform: translate3d(0, 100%, 0);
+}
+.popup-slide-up-enter-to, .popup-slide-up-leave {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+}
+.popup-slide-up-leave-active,.popup-slide-up-enter-active{
+  transition:all .3s ease;
+  -ms-transition:all 0.3s ease;/*IE*/
+  -moz-transition: all 0.3s ease; /* Firefox 4 */
+  -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
+  -o-transition: all 0.3s ease; /* Opera */
+
+}

@@ -7,9 +7,9 @@
     <shelfsearch></shelfsearch>
 
         <div class="table-wraper" v-show="!shelftitlevisble">
-            <span>默认</span>
-            <span>按进度</span>
-            <span>按分类</span>
+            <span @click="howshow('default')">默认</span>
+            <span @click="howshow('name')">按书籍</span>
+            <span @click="howshow('category')">按分类</span>
         </div>
 
       <shelflist></shelflist>
@@ -32,10 +32,47 @@ components:{
 },
 methods: {
     shelflistinit(res){
-    console.log(res);
-    this.SETSHELFLIST(res.data.bookList)
+    this.SETSHELFLIST(res.data.bookList.filter(item=>{
+        // 拿到数据写入isshow属性控制不同类型的显示
+        item.isshow=true;
+        return item
+    }))
 },
-
+// 搜索结果的再次筛选  为0即初始化或者没有搜索-直接以shelflist数据筛选  有数据说明用户搜索
+howshow(showtype){
+    if(showtype==='default'){
+        if(Boolean(this.searchindexlist[0])==false){
+            this.shelflist.forEach((item,index)=>{
+                item.isshow=true
+            })
+        }else{
+             this.searchindexlist.forEach((i)=>{
+                this.shelflist[i].isshow=true
+            })
+        }
+    }else if(showtype==='name'){
+        if(Boolean(this.searchindexlist[0])==false){
+            console.log('name-null');
+            this.shelflist.forEach((item,index)=>{
+                item.type!=1?item.isshow=false:item.isshow=true
+            })
+         }else{
+              this.searchindexlist.forEach((i)=>{
+                this.shelflist[i].type!=1?this.shelflist[i].isshow=false:this.shelflist[i].isshow=true
+            })
+         }
+    }else if(showtype==='category'){
+            if(Boolean(this.searchindexlist[0])==false){
+            this.shelflist.forEach((item,index)=>{
+                item.type!=2?item.isshow=false:item.isshow=true
+            })
+         }else{
+              this.searchindexlist.forEach((i)=>{
+                this.shelflist[i].type!=2?this.shelflist[i].isshow=false:this.shelflist[i].isshow=true
+            })
+         }
+    }
+}
 },
 mounted() {
     bookShelf().then(res=>{
@@ -68,14 +105,13 @@ mounted() {
         display: flex;
         justify-content: space-around;
         align-items: center;
-     border-bottom: 1px solid rgba(172, 164, 164,.3);
-
+     border-bottom: px2rem(1) solid rgba(172, 164, 164,.3);
         span{
          color: rgba($color: #ad8585, $alpha: 0.7);
             display: block;
         font-size: px2rem(17);
         &:hover{
-            color: rgba($color: #768ab6, $alpha: 1);
+            color: rgba($color: #1e3055, $alpha: 1);
         }
         }
     }

@@ -29,11 +29,12 @@
             </div>
         </div>
     </div> -->
+      <p v-if="!$store.state.storehome.homebooklist" >加载中...</p>
+      <guess-you-like :likelist="$store.state.storehome.homebooklist.guessYouLike" v-else></guess-you-like>
+   
     <p v-if="!$store.state.storehome.homebooklist" >加载中...</p>
      <recommend :data="$store.state.storehome.homebooklist.recommend" :lefttext="'热门推荐'" :righttext="''" v-else></recommend>
 
-      <p v-if="!$store.state.storehome.homebooklist" >加载中...</p>
-      <guess-you-like :likelist="$store.state.storehome.homebooklist.guessYouLike" v-else></guess-you-like>
   </div>
 
 </transition>

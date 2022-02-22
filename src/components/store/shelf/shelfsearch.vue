@@ -2,7 +2,7 @@
    <div class="search-wraper" :class="{'searchboxfocus':isfocus}">
         <div class="search-box-wraper">
             <span class="icon-search iconfont"></span>
-            <input type="text" ref="searchinput" v-model="searchText" @focus="gosearch" placeholder="搜索书籍" @input="inputing" @keyup.enter="inputdone"/>
+            <input type="text" ref="searchinput" v-model.trim="searchText" @focus="gosearch" placeholder="搜索书籍或分类..." @input="inputing" @keyup.enter="inputdone"/>
             <span class="iconfont icon-close-circle-fill" v-show="searchText" @click="cleartext"></span>
         </div>
         <div class="search-cancel"  @click="focuscancel" :class="{'showsearch-cancel':isfocus,'hidesearch-cancel':isfocus==false}"><span>取消</span></div>
@@ -31,12 +31,77 @@ methods: {
          this.SETTITLEVISBLE(true)
          this.searchText='';
         this.isfocus=false;
+        
+          // 取消搜索清空搜索结果记录
+        this.DELSEARCHINDEXLIST();
+
+          this.shelflist.forEach((item)=>{
+             item.isshow=true
+    })
     },
     cleartext(){
          this.searchText='';
+    this.shelflist.forEach((item)=>{
+             item.isshow=true
+    })
     },
-    inputing(){},
-    inputdone(){}
+    inputing(){
+    if(this.s){
+        clearTimeout(this.s)
+    }
+    this.s=setTimeout(()=>{
+        let bookcount=0;
+        let categorycount=0;
+
+        // 搜索前先清空历史的搜索结果记录
+        this.DELSEARCHINDEXLIST();
+
+        this.shelflist.forEach((item,index)=>{
+         if(this.searchText.length==0||this.searchText==''||!this.searchText){
+             item.isshow=true
+            //  并且存储到搜索结果数组 供用户后续的对搜索结果的进一步筛选
+            this.SETSEARCHINDEXLIST(index)
+             return
+          }
+     item.title.toLocaleLowerCase().includes(this.searchText.toLocaleLowerCase())?item.isshow=true:item.isshow=false
+       //  并且存储到搜索结果数组 供用户后续的对搜索结果的进一步筛选
+            item.isshow?this.SETSEARCHINDEXLIST(index):''
+
+    // 提示的计数
+    if(item.type==1&&item.isshow){
+     bookcount++
+    }else if(item.type==2&&item.isshow){
+        categorycount++
+    }
+
+    })
+    if(bookcount!==0||categorycount!==0){
+        this.toast({text:'为您检索到共计'+(bookcount==0?'':`<span class="shelfsearch-tip-toast">${bookcount}</span>本书籍`)+(categorycount==0?'':`<span class="shelfsearch-tip-toast">${categorycount}</span>个分类!`)}).show();
+     }
+
+
+    },500)
+
+    },
+    // 搜索已经在输入事件处理，这里只做提示 
+    inputdone(){
+        let bookcount=0;
+        let categorycount=0;
+              this.shelflist.forEach((item)=>{
+                       // 提示的计数
+           if(item.type==1&&item.isshow){
+           bookcount++
+           }else if(item.type==2&&item.isshow){
+               categorycount++
+           }
+       })
+        if(this.searchText.length==0||this.searchText==''||this.searchText==false){
+            this.toast({text:'请输入书籍或分类名称'}).show()
+        }else{
+       this.toast({text:'已经为您展示出搜索结果了哦'+(bookcount==0?'':`<span class="shelfsearch-tip-toast">${bookcount}</span>本书籍`)+(categorycount==0?'':`<span class="shelfsearch-tip-toast">${categorycount}</span>个分类!`)}).show();
+        
+        }
+    }
 },
 }
 </script>
@@ -60,8 +125,8 @@ methods: {
     height: px2rem(54);
     box-sizing: border-box;
     padding:px2rem(5) px2rem(12);
-        transition: all 0.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    // transition: all .3s linear;
+        // transition: all 0.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    transition: all .2s ease;
     &.inputmove{
     top:0;
      box-shadow:0 px2rem(2) px2rem(0) px2rem(0) rgba(0,0,0,10%);
@@ -77,9 +142,6 @@ methods: {
         border: 1px solid rgba(83, 107, 107, 0.2);
         border-radius: px2rem(25);
         padding:0 px2rem(15);
-        // margin: px2rem(5) 0;
-        // margin: 0 auto;
-        background: rgba(242, 242, 244, 100%);
         .icon-search {
           font-size: px2rem(20);
           color: #7e8186;

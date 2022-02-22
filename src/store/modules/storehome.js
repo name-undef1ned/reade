@@ -37,14 +37,43 @@ export default{
     SETTITLEVISBLE(state,newv){
         state.shelftitlevisble=newv;
     },
+    // 书架初始赋值
     SETSHELFLIST(state,newv){
         state.shelflist=newv;
     },
+   test(state,newv){
+       state.shelflist.unshift(state.shelflist[1])
+   },
+    // // 书架初始删除：newv为数组即用户选择的shelfselected
+    // DELSHELFLIST(state,newv){
+    //     state.shelflist.forEach((item,index)=>{
+    //         // item与shelfselected的每个元素比对
+    //         if(item.type==1){
+    //             for(let i=0;i<newv.length;i++){
+    //                 newv[i]==item.fileName?state.shelflist.splice(index,1):''
+    //             }
+    //         }else{return}
+    //     })
+    // },
     ADDSHELFSELECTED(state,newv){
     state.shelfselected.push(newv)
     },
     DELSHELFSELECTED(state,newv){
-    state.shelfselected.splice(state.shelfselected.indexOf(newv),1)
+        if(newv=='clear'){
+            state.shelfselected.splice(0,state.shelfselected.length)
+        }else{
+        state.shelfselected.splice(state.shelfselected.indexOf(newv),1)
+        }
+    },
+    SETSEARCHINDEXLIST(state,newv){
+        console.log(typeof newv=='object',newv);
+        typeof newv=='object'?state.searchindexlist=newv:state.searchindexlist.push(newv)
+       
+    },
+    DELSEARCHINDEXLIST(state){
+    
+            state.searchindexlist.splice(0,state.searchindexlist.length)
+        
     }
     },
     state:{
@@ -73,8 +102,8 @@ export default{
         iseditmode:false,//是否进入编辑模式
         shelflist:[],//书架图书列表
         shelfselected:[],//书架图书选中列表
-        shelftitlevisble:true//书架搜索框可见？
-       
+        shelftitlevisble:true,//书架搜索框可见？
+        searchindexlist:[] //搜索结果数组
        
 
     }

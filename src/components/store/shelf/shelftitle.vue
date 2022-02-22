@@ -1,12 +1,12 @@
 <template>
     <div class="title-wraper">
         <div class="clear-wraper">
-            <span>清除缓存</span>
+            <span class="iconfont icon-zuozhe"></span>
         </div>
 
         <div class="contenttext-wraper">
             <span>书架</span>
-            <span v-show="iseditmode">{{selecttext}}</span>
+            <span v-show="iseditmode" v-html="selecttext"></span>
         </div>
 
         <div class="edit-wraper" @click="togglemode">
@@ -30,13 +30,17 @@ export default {
     computed:{
         selecttext(){
             if(Boolean(this.shelfselected)==false) return '请单击以勾选书籍'
-            return this.shelfselected.length?`已选择${this.shelfselected.length}本书籍`:`请单击以勾选书籍`
+            return this.shelfselected.length?`已选择<span style="color:#2abbe7;font-family:'cursive,auto,monospace;'">${this.shelfselected.length}</span>本书籍`:`请单击以勾选书籍`
         }
     },
     methods: {
         togglemode(){
+            if(this.iseditmode){
+              this.DELSHELFSELECTED('clear');
+            }
             this.SETISEDITMODE(!this.iseditmode)
-        }
+        },
+       
     },
 
 }
@@ -64,7 +68,7 @@ export default {
       // font-weight: bold;
       width: px2rem(70);
       overflow: hidden;
-      font-size: px2rem(16);
+      font-size: px2rem(22);
       color: rgba($color: #ad8585, $alpha: 0.7);
     }
       .contenttext-wraper{
@@ -76,7 +80,7 @@ export default {
           :nth-child(2){
             font-size: px2rem(15);
       color: rgba($color: #ad8585, $alpha: 0.7);
-
+          // font-family: 'Courier New', Courier, monospace;
           }
 
     }
