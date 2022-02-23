@@ -1,9 +1,14 @@
 <template>
-  <div class="shelflist-wraper" :class="{'wheniseditmode':iseditmode}">
+  <div class="shelflist-wraper" :class="{
+  'whenshelfheightiseditmode':whatpage=='shelf'&&iseditmode,
+  'whencategoryheightiseditmode':whatpage!=='shelf'&&iseditmode,
+  'shelfheight':whatpage=='shelf',
+  'categoryheight':whatpage!=='shelf'
+  }">
       
       <transition-group name="shelflist" tag="div" id="tralist">
 
-   <div class="item-wraper" :key="item.id"  v-for="(item) in shelflist" v-show="item.isshow"  :class="{'editmode-category':item.type==2&&iseditmode}">
+   <div class="item-wraper" :key="item.id"  v-for="(item) in list" v-show="item.isshow"  :class="{'editmode-category':item.type==2&&iseditmode}">
        <shelfitem :data="item"  :style="{height:relHeight}"></shelfitem>
        <div class="item-title-wraepr">
        <span>{{item.title}}</span>
@@ -27,6 +32,16 @@ import shelfitemadd from './shelflitemchilden/shelfitemadd.vue'
 export default {
 name:"shelflist",
 mixins:[storeshelfmixin],
+props:{
+    list:{
+        type:Array
+    },
+    // 判断是书架页面还是分类页面的渲染 有一些top之类的渲染差异
+    whatpage:{
+        type:String,
+        default:'shelf'
+    }
+},
 data() {
     return {
         windowwidth:0
@@ -39,6 +54,12 @@ computed:{
             let a=(this.windowwidth/100*27.33)*1.4;
             if(a<184){return `${a}px`}else{return '183px'}
            
+        }
+    },
+    howheight:{
+        immediate:true,
+        get(){
+        return this.whatpage=='category'?'calc(100% - px2rem(53))':'calc(100% -109)'   
         }
     }
 },
@@ -76,20 +97,32 @@ window.removeEventListener('resize',this.relwindowwidth);
 
 <style lang="scss" scoped>
 @import '../../../assets/styles/global.scss';
-.wheniseditmode{
+.whenshelfheightiseditmode{
 height: calc(100% - px2rem(174))!important;
 }
+.whencategoryheightiseditmode{
+height: calc(100% - px2rem(121))!important;
+}
+.shelfheight{
+height: calc(100% - px2rem(109));
+top: px2rem(109);
+}
+.categoryheight{
+height: calc(100% - px2rem(56));
+top: px2rem(56);
+}
+
 .editmode-category{
         opacity: .4;
     }
    .shelflist-wraper{
         width: 100%;
-        height: calc(100% - px2rem(109));
+        // height: calc(100% - px2rem(109));
         box-sizing: border-box;
         position: absolute;
         padding: 0 px2rem(12);
         left: 0;
-        top: px2rem(109);
+        // top: px2rem(109);
         // overflow: auto;
         // display: flex;
         // flex-wrap: wrap;

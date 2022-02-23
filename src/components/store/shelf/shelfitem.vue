@@ -35,6 +35,13 @@ methods:{
                 })
             }else{
                // 跳转分类逻辑
+               this.$router.push({
+                   path:'/store/storeshelfcategory',
+                   query:{
+                        title:this.data.title,
+                        
+                   }
+               })
             }
 
         }else{

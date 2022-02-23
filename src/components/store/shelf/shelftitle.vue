@@ -1,11 +1,12 @@
 <template>
     <div class="title-wraper">
         <div class="clear-wraper">
-            <span class="iconfont icon-zuozhe"></span>
+            <span class="iconfont icon-zuozhe" v-if="whatpage=='shelf'"></span>
+            <span class="iconfont icon-back" @click="back" v-else></span>
         </div>
 
         <div class="contenttext-wraper">
-            <span>书架</span>
+            <span>{{title}}</span>
             <span v-show="iseditmode" v-html="selecttext"></span>
         </div>
 
@@ -21,6 +22,17 @@
 import {storeshelfmixin} from '../../../utils/mixin'
 export default {
     name:'shelftitle',
+    props:{
+    // 判断是书架页面还是分类页面的渲染 有一些top之类的渲染差异
+    whatpage:{
+        type:String,
+        default:'shelf'
+    },
+    title:{
+      type:String,
+      default:'书架'
+    }
+},
     mixins:[storeshelfmixin],
     data() {
         return {
@@ -40,6 +52,9 @@ export default {
             }
             this.SETISEDITMODE(!this.iseditmode)
         },
+        back(){
+          this.$router.go(-1)
+        }
        
     },
 

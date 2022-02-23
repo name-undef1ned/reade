@@ -48,6 +48,10 @@ export default new router({
                     path:'list',
                     component:()=>import(/*webpackChunkName:'router-list'*/'../pages/store/storelist.vue')
                  },
+                   {
+                    path:'storeshelfcategory',
+                    component:()=>import(/*webpackChunkName:'router-storeshelfcategory'*/'../pages/store/storeshelfcategory.vue')
+                 },
                  {
                      path:'detail',
                      component:()=>import(/*webpackChunkName:'router-detail'*/'../pages/store/storedetail.vue')

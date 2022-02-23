@@ -74,6 +74,12 @@ export default{
     
             state.searchindexlist.splice(0,state.searchindexlist.length)
         
+    },
+    SETCURRENTPAGE(state,newv){
+        state.currentpage=newv;
+    },
+    SETCURRENTCATEGORY(state,newv){
+        state.currentcategory=newv;
     }
     },
     state:{
@@ -103,8 +109,8 @@ export default{
         shelflist:[],//书架图书列表
         shelfselected:[],//书架图书选中列表
         shelftitlevisble:true,//书架搜索框可见？
-        searchindexlist:[] //搜索结果数组
-       
-
+        searchindexlist:[], //搜索结果数组
+        currentpage:'shelf',//当前所在是书架还是分类页面
+        currentcategory:''//存储当前的分类
     }
 }

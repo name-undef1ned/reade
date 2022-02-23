@@ -1,7 +1,7 @@
 <template>
   <div class="shelf-wraper">
       <transition name="fade">
-        <shelftitle v-show="shelftitlevisble"></shelftitle>
+        <shelftitle v-show="shelftitlevisble"  :whatpage="'shelf'"></shelftitle>
       </transition>
 
     <shelfsearch></shelfsearch>
@@ -12,7 +12,7 @@
             <span @click="howshow('category')">按分类</span>
         </div>
 
-      <shelflist></shelflist>
+      <shelflist :list="shelflist" :whatpage="'shelf'"></shelflist>
   </div>
 </template>
 
@@ -34,7 +34,15 @@ methods: {
     shelflistinit(res){
     this.SETSHELFLIST(res.data.bookList.filter(item=>{
         // 拿到数据写入isshow属性控制不同类型的显示
+        if(item.type==1){
         item.isshow=true;
+        }else{
+            item.isshow=true;
+            item.itemList.filter(item2=>{
+                item2.isshow=true;
+                return item2
+            })
+        }
         return item
     }))
 },
@@ -82,7 +90,14 @@ mounted() {
         console.log('请求失败');
     }
     })
+
+  this.SETCURRENTPAGE('shelf')
+
 },
+activated(){
+  this.SETCURRENTPAGE('shelf')
+
+}
 
 }
 </script>
