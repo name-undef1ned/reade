@@ -2,9 +2,11 @@
       <p v-if="!shelfcategory"></p>
   <div class="shelf-wraper" v-else>
       <transition name="fade">
-        <shelftitle v-show="shelftitlevisble" :title="shelfcategory.title" :whatpage="'category'"></shelftitle>
+        <!-- v-show="shelftitlevisble" -->
+        <shelftitle :title="shelfcategory.title" :whatpage="'category'"></shelftitle>
       </transition>
-      <shelflist :list="shelflist[shelfcategory.index].itemList" :whatpage="'category'"></shelflist>
+      <p v-if="Boolean(shelflist[shelfcategory.index])==false"></p>
+      <shelflist v-else :list="shelflist[shelfcategory.index].itemList" :whatpage="'category'"></shelflist>
   </div>
 </template>
 
@@ -25,14 +27,21 @@ components:{
            shelfcategory:null
         }
     },
-    computed:{
-
+    watch:{
+    shelfselected:{
+      immediate:true,
+      deep:true,
+      handler(){
+        console.log('检测到list变化');
+        this.shelfcategoryinit();
+      }
+    }
     },
+  
 methods: {
     shelfcategoryinit(){
            this.shelflist.forEach((item,i)=>{
         if(item.title==this.$route.query.title){
-            console.log(item.title,this.$route.query.title);
            this.shelfcategory={
                index:i,
                title:item.title

@@ -2,12 +2,12 @@
   <div class="shelf-category-wrapper">
     <!-- :class="{'is-edit': isEditMode}"  -->
     <div class="shelf-category" v-if="data.itemList.length > 0">
-      <div class="shelf-category-item" v-for="(item, index) in data.itemList" :key="index">
+      <div class="shelf-category-item" v-for="(item, index) in data.itemList" :key="index+'category'">
         <img class="shelf-category-img" :src="item.cover"/>
       </div>
     </div>
     <div class="shelf-category-bg" v-else>
-      <span class="icon-book2"></span>
+      <span class="iconfont icon-book2"></span>
     </div>
   </div>
 </template>

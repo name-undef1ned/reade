@@ -138,10 +138,10 @@ export const storehomemixin={
 
 export const storeshelfmixin={
     computed:{
-        ...mapState('storehome',['iseditmode','shelflist','shelfselected','shelftitlevisble','searchindexlist','currentpage','setcurrentcategory'])
+        ...mapState('storehome',['iseditmode','shelflist','shelfselected','shelftitlevisble','searchindexlist','currentpage','currentcategory'])
     },
     methods:{
-        ...mapMutations('storehome',['SETISEDITMODE','SETTITLEVISBLE','SETSHELFLIST','ADDSHELFSELECTED','DELSHELFSELECTED','DELSHELFLIST','SETSEARCHINDEXLIST','DELSEARCHINDEXLIST','SETCURRENTPAGE','SETCURRENTCATEGORY']),
+        ...mapMutations('storehome',['SETISEDITMODE','SETTITLEVISBLE','SETSHELFLIST','ADDSHELFSELECTED','DELSHELFSELECTED','DELSHELFLIST','SETSEARCHINDEXLIST','DELSEARCHINDEXLIST','SETCURRENTPAGE','SETCURRENTCATEGORY','SEARCHLISTHOWSHOW']),
      
     }
 }

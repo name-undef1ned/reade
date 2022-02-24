@@ -49,25 +49,22 @@ methods: {
 // 搜索结果的再次筛选  为0即初始化或者没有搜索-直接以shelflist数据筛选  有数据说明用户搜索
 howshow(showtype){
     if(showtype==='default'){
+        // 无搜索结果分支
         if(Boolean(this.searchindexlist[0])==false){
             this.shelflist.forEach((item,index)=>{
                 item.isshow=true
             })
         }else{
-             this.searchindexlist.forEach((i)=>{
-                this.shelflist[i].isshow=true
-            })
+        // 有搜索结果分支-进一步筛选
+        this.SEARCHLISTHOWSHOW({type:'default'})
         }
     }else if(showtype==='name'){
         if(Boolean(this.searchindexlist[0])==false){
-            console.log('name-null');
             this.shelflist.forEach((item,index)=>{
                 item.type!=1?item.isshow=false:item.isshow=true
             })
          }else{
-              this.searchindexlist.forEach((i)=>{
-                this.shelflist[i].type!=1?this.shelflist[i].isshow=false:this.shelflist[i].isshow=true
-            })
+        this.SEARCHLISTHOWSHOW({type:'name'})
          }
     }else if(showtype==='category'){
             if(Boolean(this.searchindexlist[0])==false){
@@ -75,9 +72,7 @@ howshow(showtype){
                 item.type!=2?item.isshow=false:item.isshow=true
             })
          }else{
-              this.searchindexlist.forEach((i)=>{
-                this.shelflist[i].type!=2?this.shelflist[i].isshow=false:this.shelflist[i].isshow=true
-            })
+        this.SEARCHLISTHOWSHOW({type:'category'})
          }
     }
 }

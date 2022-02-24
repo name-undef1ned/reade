@@ -2,7 +2,10 @@
     <div class="title-wraper">
         <div class="clear-wraper">
             <span class="iconfont icon-zuozhe" v-if="whatpage=='shelf'"></span>
-            <span class="iconfont icon-back" @click="back" v-else></span>
+            <div class="categorypage-wraper" v-else>
+            <span class="iconfont icon-back" @click="back" v-show="iseditmode==false"></span>
+            <span class="editcategoryname" @click="editcategoryname" v-show="iseditmode">修改名称</span>
+            </div>
         </div>
 
         <div class="contenttext-wraper">
@@ -53,8 +56,11 @@ export default {
             this.SETISEDITMODE(!this.iseditmode)
         },
         back(){
-          this.$router.go(-1)
-        }
+          this.SETISEDITMODE(false);
+          this.DELSHELFSELECTED("clear");
+          this.$router.go(-1);
+        },
+        editcategoryname(){}
        
     },
 
@@ -85,6 +91,9 @@ export default {
       overflow: hidden;
       font-size: px2rem(22);
       color: rgba($color: #ad8585, $alpha: 0.7);
+      .editcategoryname{
+        font-size: px2rem(15);
+      }
     }
       .contenttext-wraper{
           text-align: center;

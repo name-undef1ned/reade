@@ -9,20 +9,21 @@
                         
                         <div class="btn-wraper">
                                 <div class="btn-normal-wraper" v-show="!iscreatemode">
-                                    <div class="moveout-wraper"  v-if="$store.state.storehome.currentpage=='category'">
-                                        <span class="iconfont icon-fanhui"></span><span>从分组中移出</span>
+                                    <div class="moveout-wraper"  v-if="$store.state.storehome.currentpage=='category'" @click="moveoutcategory">
+                                        <span class="iconfont icon-fanhui"></span>
+                                        <span>从分组中移出</span>
                                     </div>
 
                                      <div class="create-wraper" @click="createcategory">
                                         <span class="iconfont icon-add"></span><span>新建分组</span>
                                     </div>
 
-                                    <div class="category-item-wraper" v-for="(item,index) in sortlist" :key="'category'+index">
+                                    <div class="category-item-wraper" v-for="(item,index) in sortlist" :key="'category'+index" @click="categorymove(item)">
                                         <!-- iconcheck条件 为 category页面且当前的分组 -->
                                         <span class="iconfont icon-24gl-folder"></span><span>{{item}}</span><span v-if="$store.state.storehome.currentcategory==item&&$store.state.storehome.currentpage=='category'" class="iconfont icon-check"></span>   
                                     </div>
                                 </div>
-                                <transition name="title-move">
+                                <transition name="dialogtitle-move">
                                 <div class="btn-create-wraper" v-show="iscreatemode">
                                     <!-- 新建元素 -->
                                     <div class="create-title-wraper"><span>设置分组名称:</span></div>
@@ -76,6 +77,7 @@ methods:{
         this.isshow=true;
     },
     hide(){
+        console.log('隐藏');
         this.isshow=false;
     },
     // 当前分类排在前边
@@ -102,10 +104,20 @@ methods:{
         this.$refs.inp.focus();
         })
     },
+    moveoutcategory(){
+    this.$bus.$emit('confirmmoveoutcategory');
+    this.hide()
+    },
+    categorymove(categorytext){
+        this.$bus.$emit('confirmcategorymove',categorytext);
+    this.hide()
+    },
     addcategory(){
-        console.log(this.searhtext.length);
         if(this.searhtext.length>10||this.searhtext.length<3){
             this.toast({text:'最长不能超过十位，最短不能低于2位，请重新输入！'}).show()
+        }else{
+            this.$bus.$emit('confirmcreatecategory',this.searhtext)
+            this.hide()
         }
     }
 },

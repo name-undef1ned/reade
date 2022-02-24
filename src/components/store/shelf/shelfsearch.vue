@@ -55,17 +55,19 @@ methods: {
 
         // 搜索前先清空历史的搜索结果记录
         this.DELSEARCHINDEXLIST();
+        // 搜索前清空选中列表
+        this.DELSHELFSELECTED('clear')
 
         this.shelflist.forEach((item,index)=>{
          if(this.searchText.length==0||this.searchText==''||!this.searchText){
              item.isshow=true
             //  并且存储到搜索结果数组 供用户后续的对搜索结果的进一步筛选
-            this.SETSEARCHINDEXLIST(index)
+            this.SETSEARCHINDEXLIST(item.title)
              return
           }
      item.title.toLocaleLowerCase().includes(this.searchText.toLocaleLowerCase())?item.isshow=true:item.isshow=false
        //  并且存储到搜索结果数组 供用户后续的对搜索结果的进一步筛选
-            item.isshow?this.SETSEARCHINDEXLIST(index):''
+            item.isshow?this.SETSEARCHINDEXLIST(item.title):''
 
     // 提示的计数
     if(item.type==1&&item.isshow){

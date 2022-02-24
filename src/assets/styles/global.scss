@@ -369,3 +369,25 @@ margin-bottom: 10px;
   -o-transition: all 0.3s ease; /* Opera */
 
 }
+
+
+// dialog组件
+// searchbar组件title
+.dialogtitle-move-enter{
+  transform: translate3d(0,px2rem(10),0);
+  opacity: 0;
+}
+//  离开起点后的状态和元素最终状态 。但是元素最终状态会被元素本身的样式类覆盖
+.dialogtitle-move-enter-to{
+  transform: translate3d(0,0,0);
+  opacity: 1;
+}
+//  整个过程
+.dialogtitle-move-enter-active{
+ transition:all .3s ease;
+ -ms-transition:all 0.3s ease;/*IE*/
+ -moz-transition: all 0.3s ease; /* Firefox 4 */
+ -webkit-transition:all 0.3s ease; /* Safari 和 Chrome */
+ -o-transition: all 0.3s ease; /* Opera */
+
+}

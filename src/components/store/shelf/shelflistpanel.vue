@@ -41,7 +41,8 @@ export default {
       immediate: true,
       deep: true,
       handler() {
-        console.log(123);
+            if(this.currentpage=='shelf'){
+
         let num = 0;
         this.shelflist.forEach((item) => {
           if (item.type == 1) {
@@ -55,18 +56,105 @@ export default {
           : num == this.shelfselected.length
           ? (this.isselectAll = true)
           : (this.isselectAll = false);
+            }else{
+                    this.shelflist.forEach((item) => {
+                    if (
+                      item.type == 2 &&
+                      item.title==this.currentcategory
+                    ) {
+                      // 开始勾选
+                      item.itemList.length==this.shelfselected.length&&this.shelfselected.length!=0?(this.isselectAll = true): (this.isselectAll = false);
+                    } else {
+                      return;
+                    }
+      });
+            }
       },
     },
   },
-  methods: {
-    categorymove(){
-      const temparr=[1,2,2,2,2,2,2,5,6,5,6]
+  computed:{
+    categorytitlelist(){
+      const temparr=[]
       this.shelflist.forEach(i=>{
         i.type==2?temparr.push(i.title):' '
       })
-      this.shelfdialog({list:temparr}).show()
+      return temparr
+    }
+  },
+  methods: {
+    categorymove(){
+      if (this.shelfselected[0]) {
+      this.shelfdialog({list:this.categorytitlelist}).show()
+      }else{
+      this.toast({ text: "勾选书籍才能设置分类哦!" }).show();
+      }
     },
-
+    confirmcategorymove(categorytitle){
+       if(this.currentpage=='shelf'){
+        //  从书架将书籍移入分类
+         this.toast({
+        text:
+          "已将" +
+          (this.shelfselected[1]
+            ? `您选中的共计<span class="shelfsearch-tip-toast">${this.shelfselected.length}</span>本书成功移至<span class="shelfsearch-tip-toast">${categorytitle}</span>分类!`
+            : `您选中的<span class="shelfsearch-tip-toast">${this.shelfselected[0]}</span>成功移至<span class="shelfsearch-tip-toast">${categorytitle}</span>分类!`),
+      }).show();
+        this.SETSHELFLIST({type:'shelfconfirmcategorymove',text:categorytitle})
+        }else{
+        //  从分类将书籍移入分类
+        if(this.currentcategory!==categorytitle){
+           this.toast({
+          text:
+          "已将" +
+          (this.shelfselected[1]
+            ? `您选中的共计<span class="shelfsearch-tip-toast">${this.shelfselected.length}</span>本书成功移至<span class="shelfsearch-tip-toast">${categorytitle}</span>分类!`
+            : `您选中的<span class="shelfsearch-tip-toast">${this.shelfselected[0]}</span>成功移至<span class="shelfsearch-tip-toast">${categorytitle}</span>分类!`),
+          }).show();
+          this.SETSHELFLIST({type:'categoryconfirmcategorymove',text:categorytitle})
+        }else{
+        this.toast({ text: "不能移入当前分类哦" }).show();
+        }
+      }
+    },
+    confirmcreatecategory(newcategorytitle){
+      if(this.categorytitlelist.indexOf(newcategorytitle)<0){
+         if(this.currentpage=='shelf'){
+        //  从书架将书籍移入新建分类
+     
+        this.toast({
+          text:
+          "已将" +
+          (this.shelfselected[1]
+            ? `您选中的共计<span class="shelfsearch-tip-toast">${this.shelfselected.length}</span>本书成功移至<span class="shelfsearch-tip-toast">${newcategorytitle}</span>新建分类!`
+            : `您选中的<span class="shelfsearch-tip-toast">${this.shelfselected[0]}</span>成功移至<span class="shelfsearch-tip-toast">${newcategorytitle}</span>新建分类!`),
+          }).show();
+        this.SETSHELFLIST({type:'shelfconfirmcreatecategory',text:newcategorytitle})
+        }else{
+        //  从分类将书籍移入新建分类
+        this.toast({
+          text:
+          "已将" +
+          (this.shelfselected[1]
+            ? `您选中的共计<span class="shelfsearch-tip-toast">${this.shelfselected.length}</span>本书成功移至<span class="shelfsearch-tip-toast">${newcategorytitle}</span>新建分类!`
+            : `您选中的<span class="shelfsearch-tip-toast">${this.shelfselected[0]}</span>成功移至<span class="shelfsearch-tip-toast">${newcategorytitle}</span>新建分类!`),
+          }).show();
+        this.SETSHELFLIST({type:'categoryconfirmcreatecategory',text:newcategorytitle})
+        }
+      }else{
+        this.toast({ text: "您已创建相同分类！请更换分类名称..." }).show();
+      }
+    },
+    confirmmoveoutcategory(){
+      // 从分类将书籍移回书架
+       this.toast({
+          text:
+          "已将" +
+          (this.shelfselected[1]
+            ? `您选中的共计<span class="shelfsearch-tip-toast">${this.shelfselected.length}</span>本书成功移至书架!`
+            : `您选中的<span class="shelfsearch-tip-toast">${this.shelfselected[0]}</span>成功移至书架`),
+          }).show();
+    this.SETSHELFLIST({type:'confirmmoveoutcategory'})
+    },
     bookmove() {
       if (this.shelfselected[0]) {
         this.popup({
@@ -84,27 +172,8 @@ export default {
     },
     // 得到对话框的确认，开始删除
     bookconfirmremove() {
-      //    编辑模式下删除需要更新搜索结果数据  更新-1
-      let tempsearchlist = [];
-      this.searchindexlist.forEach((i) => {
-        tempsearchlist.push(this.shelflist[i].title);
-      });
-
-      // 更新-2 :把选中的排除并转化成书架列表的下标
-      let tempsearchlist2 = tempsearchlist.filter((indxtitle) => {
-        return this.shelfselected.indexOf(indxtitle) < 0;
-      });
-
-      // 删除
-      // 1type不为1的直接返回,为1的判断是否存在于用户选中的2用户选择数组清空
-      // *不直接重新赋值新数组否则会全部重新加载（需要变化的数据才变化-才会通知需要更新的依赖）
-      this.SETSHELFLIST(
-        this.shelflist.filter((item) => {
-          return item.type == 1
-            ? this.shelfselected.indexOf(item.title) < 0
-            : item;
-        })
-      );
+      // 删除-start
+      if(this.currentpage=='shelf'){
       this.toast({
         text:
           "已将" +
@@ -112,20 +181,24 @@ export default {
             ? `您选中的共计<span class="shelfsearch-tip-toast">${this.shelfselected.length}</span>本书成功移出书架!`
             : `您选中的<span class="shelfsearch-tip-toast">${this.shelfselected[0]}</span>成功移出书架!`),
       }).show();
-
-      //    更新3：删除之后下标变化 开始转化
-      let tempindexlist = [];
-      this.shelflist.forEach((item, index) => {
-        tempsearchlist2.indexOf(item.title) < 0
-          ? ""
-          : tempindexlist.push(index);
-      });
-      this.SETSEARCHINDEXLIST(tempindexlist);
-
-      this.DELSHELFSELECTED("clear");
+        this.SETSHELFLIST({type:'shelfdel'})
+      }else{
+      this.toast({
+        text:
+          "已将" +
+          (this.shelfselected[1]
+            ? `您选中的共计<span class="shelfsearch-tip-toast">${this.shelfselected.length}</span>本书成功移出书架!`
+            : `您选中的<span class="shelfsearch-tip-toast">${this.shelfselected[0]}</span>成功移出书架!`),
+          }).show();
+        this.SETSHELFLIST({type:'categorydel'})
+      
+           
+      }
+      // 删除-end
     },
-    // 全选和全不选的条件应该是用户看到的书籍才能加入选中/不选中数组
+    // 全选和全不选的条件应该是用户看到的书籍才能加入选中/不选中数组.分支应该是书架页面和分类页面两个分支
     selectAll() {
+      if(this.currentpage=='shelf'){
       this.shelflist.forEach((item) => {
         if (
           item.type == 1 &&
@@ -137,14 +210,41 @@ export default {
           return;
         }
       });
-      // this.shelflist.reverse()
+      }else{
+        // 分类的全选不需要基于搜索结果 所以不需要isshow为条件
+           this.shelflist.forEach((item) => {
+        if (
+          item.type == 2 &&
+          item.title==this.currentcategory
+        ) {
+          // 开始添加
+          if(item.itemList.length>this.shelfselected.length){
+          item.itemList.forEach((item2)=>{
+            this.shelfselected.indexOf(item2.title)<0?this.ADDSHELFSELECTED(item2.title):''
+          })
+          }else{
+            return
+          }
+        } else {
+          return;
+        }
+      });
+      }
+   
     },
     unselectAll() {
       this.DELSHELFSELECTED("clear");
+    
     },
   },
   mounted() {
+    if(Boolean(this.$bus._events.confirmcategorymove)==false){
     this.$bus.$on("shelfpanelbookconfirmremove", this.bookconfirmremove);
+    this.$bus.$on("confirmcategorymove", this.confirmcategorymove);
+    this.$bus.$on("confirmcreatecategory", this.confirmcreatecategory);
+    this.$bus.$on("confirmmoveoutcategory", this.confirmmoveoutcategory);
+    }
+
   },
 };
 </script>

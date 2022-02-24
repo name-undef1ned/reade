@@ -8,7 +8,7 @@
       
       <transition-group name="shelflist" tag="div" id="tralist">
 
-   <div class="item-wraper" :key="item.id"  v-for="(item) in list" v-show="item.isshow"  :class="{'editmode-category':item.type==2&&iseditmode}">
+   <div class="item-wraper" :key="item.id+item.title"  v-for="(item) in list" v-show="item.isshow"  :class="{'editmode-category':item.type==2&&iseditmode}">
        <shelfitem :data="item"  :style="{height:relHeight}"></shelfitem>
        <div class="item-title-wraepr">
        <span>{{item.title}}</span>
