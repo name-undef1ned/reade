@@ -4,12 +4,12 @@
             <span class="iconfont icon-zuozhe" v-if="whatpage=='shelf'"></span>
             <div class="categorypage-wraper" v-else>
             <span class="iconfont icon-back" @click="back" v-show="iseditmode==false"></span>
-            <span class="editcategoryname" @click="editcategoryname" v-show="iseditmode">修改名称</span>
+            <span class="editcategoryname" @click="editcategory" v-show="iseditmode">修改分类</span>
             </div>
         </div>
 
         <div class="contenttext-wraper">
-            <span>{{title}}</span>
+            <span class="title-span">{{title}}</span>
             <span v-show="iseditmode" v-html="selecttext"></span>
         </div>
 
@@ -45,7 +45,7 @@ export default {
     computed:{
         selecttext(){
             if(Boolean(this.shelfselected)==false) return '请单击以勾选书籍'
-            return this.shelfselected.length?`已选择<span style="color:#2abbe7;font-family:'cursive,auto,monospace;'">${this.shelfselected.length}</span>本书籍`:`请单击以勾选书籍`
+            return this.shelfselected.length?`已选择<span class="title-selected">${this.shelfselected.length}</span>本书籍`:`请单击以勾选书籍`
         }
     },
     methods: {
@@ -60,9 +60,51 @@ export default {
           this.DELSHELFSELECTED("clear");
           this.$router.go(-1);
         },
-        editcategoryname(){}
+        editcategory(){
+          this.popup({
+          title:`修改"${this.currentcategory}"分类`,
+          confirmText: "删除分组",
+          thirdText:'修改分类名',
+          isRemoveText: true,
+          cancelText: "取消",
+          confirmEvenName: 'poppredelcategory',
+          thirdTextconfirmEvenName:'popeditcategory'
+        }).show();
+        },
+        predelcategory(){
+          this.popup({
+          title:`该分类含有书籍,删除后分类书籍移至书架,确定吗?`,
+          confirmText: "确定删除",
+          isRemoveText: true,
+          cancelText: "取消",
+          confirmEvenName: "popdelcategory",
+        }).show();  
+        },
+        delcategory(){
+          this.SETSHELFLIST({type:'delcategory'})
+          this.toast({text:'删除成功！'}).show();
+          this.$router.go(-1);
+           this.SETISEDITMODE(false)
+        },
+        preeditcategory(){
+        this.shelfdialog({editcategory:true}).show()
+        },
+        confirmeditcategory(editname){
+        this.SETSHELFLIST({type:'editcategoryname',editname})
+          this.toast({text:`成功修改为${this.currentcategory}`}).show();
+           this.SETISEDITMODE(false)
+
+        }
        
     },
+    mounted(){
+      if(Boolean(this.$bus._events.poppredelcategory)==false){
+        this.$bus.$on('poppredelcategory',this.predelcategory)
+        this.$bus.$on('popdelcategory',this.delcategory)
+        this.$bus.$on('popeditcategory',this.preeditcategory)
+        this.$bus.$on('dialogconfirmeditcategory',this.confirmeditcategory)
+      }
+    }
 
 }
 </script>
@@ -97,14 +139,22 @@ export default {
     }
       .contenttext-wraper{
           text-align: center;
-          :nth-child(1){
+            width: 70%;
+            overflow: hidden;
+          .title-span{
             font-weight: bolder;
-            font-size: px2rem(25);
+            width: 100%;
+            font-size: px2rem(20);
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: inline-block;
           }
           :nth-child(2){
             font-size: px2rem(15);
       color: rgba($color: #ad8585, $alpha: 0.7);
           // font-family: 'Courier New', Courier, monospace;
+         
           }
 
     }

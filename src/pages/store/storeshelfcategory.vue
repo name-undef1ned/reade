@@ -3,7 +3,7 @@
   <div class="shelf-wraper" v-else>
       <transition name="fade">
         <!-- v-show="shelftitlevisble" -->
-        <shelftitle :title="shelfcategory.title" :whatpage="'category'"></shelftitle>
+        <shelftitle :title="currentcategory" :whatpage="'category'"></shelftitle>
       </transition>
       <p v-if="Boolean(shelflist[shelfcategory.index])==false"></p>
       <shelflist v-else :list="shelflist[shelfcategory.index].itemList" :whatpage="'category'"></shelflist>

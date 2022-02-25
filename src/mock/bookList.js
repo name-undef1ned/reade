@@ -18,7 +18,7 @@ module.exports = {
         'private': false,
         'cache': false,
         'haveRead': 0,
-        'type': 3,
+        'type': 1,
         'result': '随机',
         'percent': '97%'
       },

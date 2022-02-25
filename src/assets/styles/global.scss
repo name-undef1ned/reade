@@ -131,6 +131,14 @@ margin-bottom: 10px;
   font-weight: bolder;
 }
 
+.title-selected{
+  color:#2abbe7;
+  font-family:'cursive,auto,monospace';
+  font-size: px2rem(20);
+  font-weight: bold;
+  
+}
+
 // 公共样式区域
 // 动态样式 有逻辑的 抽离出一个独立的类名
 .showclass {

@@ -46,8 +46,8 @@
       <div class="reader-wraper">
       <span @click="readBook">阅读</span>
       </div>
-      <div class="shelf-wraper">
-      <span>加入书架</span>
+      <div class="shelf-wraper" @click="addshelf">
+      <span :class="{shelfhas:shelfhas}">{{shelfhas?'已添加书架':'添加书架'}}</span>
       </div>
     </div>
   </div>
@@ -63,8 +63,10 @@ import {getCategoryName} from '../../utils/book'
 import bookInfo from '../../components/detail/bookInfo.vue'
 import detaiTitle from '../../components/detail/detaiTitle.vue'
 import loading from '../../components/ebook/Notice/loading'
+import {storeshelfmixin} from '../../utils/mixin'
 export default {
 name:'storedetail',
+mixins:[storeshelfmixin],
 components:{
   bookInfo,
   detaiTitle,
@@ -87,10 +89,43 @@ data() {
         toastText: '',
         trialText: null,
         categoryText: null,
-        opf: null
+        opf: null,
+        // shelfhas:false
+  }
+},
+computed:{
+  // 是否已经存在于书架的判断  如果用户直接来到书城页面没有去书架页面 计算不准确-因为此时没有拿书架数据
+  shelfhas:{
+    immediate:true,
+    get(){
+        let shelfhas=false;
+      this.shelflist.forEach(item => {
+      if(item.type==1){
+        item.fileName==this.bookItem.fileName?shelfhas=true:''
+      }else{
+        item.itemList.forEach(item2=>{
+        item2.fileName==this.bookItem.fileName?shelfhas=true:''
+        })
+      }
+    })
+    return shelfhas;
+    }
   }
 },
 methods: {
+  addshelf(){
+    if(this.shelfhas){
+      console.log(123);
+      this.toast({text:'已经存在于书架哦'}).show()
+    }else{
+      console.log('add');
+      this.bookItem.isshow=true;
+      this.bookItem.type=1;
+      this.SETSHELFLIST({type:'addbook',book:this.bookItem})
+      this.toast({text:'添加书架成功,快去阅读吧！'}).show()
+    }
+    
+  },
   getCategoryName(category){
     return getCategoryName(category)
   },
@@ -99,7 +134,7 @@ methods: {
   },
   // 跳转阅读器 使用nginx接口 而不是opf接口
      readBook() {
-      //  console.log(this.categoryText,this.bookItem.fileName);
+       console.log(this.categoryText,this.bookItem.fileName);
        this.$router.push({
               path: `/ebook/${this.categoryText}|${this.bookItem.fileName}`
             })
@@ -184,6 +219,9 @@ mounted() {
 
 <style lang="scss" scoped>
 @import '../../assets/styles/global.scss';
+.shelfhas{
+  color: #ccc!important;
+}
 .storedetail-wraper{
    width: 100%;
    height: 100%;

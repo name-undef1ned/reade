@@ -194,6 +194,40 @@ export default{
             })
 
             state.shelfselected=[];
+        }else if(newv.type=='delcategory'){
+          
+            // 从分类页面将分类删除
+               let currentcategoryindex=0;
+            // 2获取当前分类的下标
+            state.shelflist.forEach((item,index)=>{
+                // 当前分类位置
+            item.title==state.currentcategory&&item.type==2?currentcategoryindex=index:''
+            })
+            // 2.1判断当前分类选中的并存入书架数组
+            state.shelflist[currentcategoryindex].itemList.forEach((item)=>{
+                state.shelflist.push(item)
+            })
+            // 2.2删除当前分类
+            state.shelflist=state.shelflist.filter(item=>{
+                return item.type==1?item:item.title!=state.currentcategory
+            })
+            // 3.清空shelfselected
+            state.shelfselected=[];
+        }else if(newv.type=='editcategoryname'){
+        // 从分类页面修改分类名称
+         
+            let currentcategoryindex=0;
+            // 1找到下标
+            state.shelflist.forEach((item,index)=>{
+                // 当前分类位置
+            item.title==state.currentcategory&&item.type==2?currentcategoryindex=index:''
+            })
+            // 2修改
+            state.shelflist[currentcategoryindex].title=newv.editname;
+            // 重置当前的全局分类名
+            state.currentcategory=newv.editname;
+        }else if(newv.type=='addbook'){
+            state.shelflist.push(newv.book)
         }
     }
     },

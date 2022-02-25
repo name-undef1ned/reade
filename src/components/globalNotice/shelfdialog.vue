@@ -14,7 +14,7 @@
                                         <span>从分组中移出</span>
                                     </div>
 
-                                     <div class="create-wraper" @click="createcategory">
+                                     <div class="create-wraper"  @click="createcategory">
                                         <span class="iconfont icon-add"></span><span>新建分组</span>
                                     </div>
 
@@ -59,7 +59,22 @@ name:'shelfdialog',
 props:{
     list:{
         type:Array
+    },
+    editcategory:{
+        type:Boolean,
+        default:false
     }
+},
+watch:{
+    // editcategory:{
+    //         immediate:true,
+    //         handler(newv){
+    //         console.log('监听',newv);
+    //         if(newv){
+    //             this.createcategory()
+    //         }
+    //         }
+    // }
 },
 data() {
     return {
@@ -71,10 +86,20 @@ data() {
 },
 methods:{
     show(){
-        this.sortlistinit();
+        // 更改分类名
+        if(this.editcategory){
+        this.iscreatemode=true;
+        this.isshow=true;
         this.searhtext='';
+        this.$nextTick(()=>{
+        this.$refs.inp.focus();
+        })
+        }else{
+        // 正常模式
+        this.sortlistinit();
         this.iscreatemode=false;
         this.isshow=true;
+        }
     },
     hide(){
         console.log('隐藏');
@@ -99,6 +124,7 @@ methods:{
     },
     // 新建分组功能
     createcategory(){
+        console.log('编辑模式');
         this.iscreatemode=true;
         this.$nextTick(()=>{
         this.$refs.inp.focus();
@@ -113,11 +139,20 @@ methods:{
     this.hide()
     },
     addcategory(){
+        if(this.editcategory){
+            if(this.searhtext.length>10||this.searhtext.length<3){
+            this.toast({text:'最长不能超过十位，最短不能低于2位，请重新输入！'}).show()
+        }else{
+            this.$bus.$emit('dialogconfirmeditcategory',this.searhtext)
+            this.hide()
+        }
+        }else{
         if(this.searhtext.length>10||this.searhtext.length<3){
             this.toast({text:'最长不能超过十位，最短不能低于2位，请重新输入！'}).show()
         }else{
             this.$bus.$emit('confirmcreatecategory',this.searhtext)
             this.hide()
+        }
         }
     }
 },

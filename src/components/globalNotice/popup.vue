@@ -42,7 +42,8 @@ export default {
     isRemoveText: Boolean,
     cancelText: String,
     thirdText: String,
-    confirmEvenName:String
+    confirmEvenName:String,
+    thirdTextconfirmEvenName:String
   },
   data() {
     return {
@@ -54,7 +55,7 @@ export default {
     third() {
       this.hide();
       setTimeout(() => {
-        this.$emit("third");
+        this.$bus.$emit(this.thirdTextconfirmEvenName);
       }, 200);
     },
     confirm() {

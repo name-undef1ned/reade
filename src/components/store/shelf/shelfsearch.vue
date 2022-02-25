@@ -64,8 +64,17 @@ methods: {
             //  并且存储到搜索结果数组 供用户后续的对搜索结果的进一步筛选
             this.SETSEARCHINDEXLIST(item.title)
              return
-          }
-     item.title.toLocaleLowerCase().includes(this.searchText.toLocaleLowerCase())?item.isshow=true:item.isshow=false
+          } 
+
+        //   搜索逻辑：1没有中文转小写匹配2否则直接匹配
+        console.log(escape(this.searchText).indexOf( "%u" )>=0);
+        if(escape(this.searchText).indexOf( "%u" )>=0){
+        item.title.includes(this.searchText)?item.isshow=true:item.isshow=false
+        }else{
+        item.title.toLocaleLowerCase().includes(this.searchText.toLocaleLowerCase())?item.isshow=true:item.isshow=false
+        }
+       
+       
        //  并且存储到搜索结果数组 供用户后续的对搜索结果的进一步筛选
             item.isshow?this.SETSEARCHINDEXLIST(item.title):''
 
