@@ -1,19 +1,17 @@
 import axios from 'axios'
-const baseurl='http://192.168.3.70:8081/';
+// const baseurl='http://192.168.3.70:8081/';
+
+const baseurl='http://124.221.107.109/';
+// const baseurl='https://book.youbaobao.xyz:18081/';
 // home页面 mock接口
 export function home(){
     return axios({
         method:'get',
-        // url:`http://home页面线上地址(暂时使用mock模拟)/book/home`
-        url:`${baseurl}mock/bookHome.JSON`
+        url:`${baseurl}book/home`
+        // url:`${baseurl}mock/bookHome.JSON`
     })
 } 
-export function home2(){
-  return axios({
-      method:'get',
-      url:`${baseurl}mock/bookHome.JSON`
-  })
-} 
+
 // 英文书detail页面接口
 export function detail(book) {
     return axios({
@@ -41,7 +39,8 @@ export function chenesebookdetail(book) {
 export function list() {
   return axios({
     method: 'get',
-    url:`${baseurl}mock/bookList.JSON`
+    url:`${baseurl}book/list`
+    // url:`${baseurl}mock/bookList.JSON`
   })
 }
 
@@ -49,14 +48,9 @@ export function list() {
 export function bookShelf() {
   return axios({
     method: 'get',
-    url:`${baseurl}mock/bookShelf.JSON`
+    url:`${baseurl}book/shelf`
+    // url:`${baseurl}mock/bookShelf.JSON`
   })
 }
   
-//   export function flatList() {
-//     return axios({
-//       method: 'get',
-//       url: `${process.env.VUE_APP_BOOK_URL}/book/flat-list`
-//     })
-//   }
   
