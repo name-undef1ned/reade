@@ -51,7 +51,7 @@ const vm = {
   data() {
     return {
       // nginxBaseUrl: "http://47.99.166.157/",
-      nginxBaseUrl: "http://192.168.3.70:8081/",
+      nginxBaseUrl: "http://124.221.107.109/",
       book: {},
       cursorefn: {},
       isshowwindowchangetip: false,

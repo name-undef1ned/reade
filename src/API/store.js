@@ -7,8 +7,7 @@ const baseurl='http://124.221.107.109/';
 export function home(){
     return axios({
         method:'get',
-        url:`${baseurl}book/home`
-        // url:`${baseurl}mock/bookHome.JSON`
+        url:`${baseurl}mock/bookHome.JSON`
     })
 } 
 
@@ -18,7 +17,6 @@ export function detail(book) {
       method: 'get',
       url: `https://book.youbaobao.xyz:18081/book/detail`,
       // url: `http://47.99.166.157:3030/book/detail`,
-      // url: `${process.env.VUE_APP_BOOK_URL}/book/detail`,
       params: {
         fileName: book.fileName
       }
@@ -39,8 +37,7 @@ export function chenesebookdetail(book) {
 export function list() {
   return axios({
     method: 'get',
-    url:`${baseurl}book/list`
-    // url:`${baseurl}mock/bookList.JSON`
+    url:`${baseurl}mock/bookList.JSON`
   })
 }
 
@@ -48,9 +45,7 @@ export function list() {
 export function bookShelf() {
   return axios({
     method: 'get',
-    url:`${baseurl}book/shelf`
-    // url:`${baseurl}mock/bookShelf.JSON`
+    url:`${baseurl}mock/bookShelf.JSON`
   })
 }
-  
   
