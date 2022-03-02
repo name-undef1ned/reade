@@ -3,7 +3,7 @@
     <!-- :class="{'is-edit': isEditMode}"  -->
     <div class="shelf-category" v-if="data.itemList.length > 0">
       <div class="shelf-category-item" v-for="(item, index) in data.itemList" :key="index+'category'">
-        <img class="shelf-category-img" :src="item.cover"/>
+        <img class="shelf-category-img" v-lazy="item.cover" :key="item.cover"/>
       </div>
     </div>
     <div class="shelf-category-bg" v-else>

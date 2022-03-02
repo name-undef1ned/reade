@@ -9,7 +9,7 @@
     <div class="recommend-list">
       <div class="recommend-item" :class="{'recommend-item-where3Item':data.length<=3}" v-for="(item, index) in data" :key="index" @click="showbookdetail(item)">
         <div class="img-wrapper">
-          <img class="img" :src="item.cover">
+          <img class="img" v-lazy="item.cover" :key="item.cover">
         </div>
         <div class="content-wrapper">
           <div class="title title-medium" ref="title">{{item.title}}</div>

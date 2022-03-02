@@ -17,8 +17,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import element from './element/index'
 Vue.use(element)
 
-// main.js引入vue-create-api
-import 'vue-create-api'
+// main.js引入vue-create-api js文件
+// import 'vue-create-api'
 import './utils/creatapi'
 
 // 组件引入区
@@ -26,6 +26,9 @@ import App from './App.vue'
 
 // 不全局引入mock 资源下载类页面是用不了mock的数据
 // import './mock/index';
+
+// 引入lazyoadjs文件
+import './lazyload'
 
 
 // 禁用生产提示

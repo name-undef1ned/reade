@@ -3,7 +3,7 @@
         {
 		"id": 1003,
 		"fileName": "论语、老子、孟子、庄子、孙子兵法",
-		"cover": "http://192.168.3.70:8081/bookimgs/4782d299-2386-47a7-ae5b-d4580ef0ab34.jfif",
+		"cover": "http://124.221.107.109/bookimgs/4782d299-2386-47a7-ae5b-d4580ef0ab34.jfif",
 		"title": "中信国学大典五册套装（论语、老子、孟子、庄子、孙子兵法）",
 		"author": "陈鼓应，蒋丽梅",
 		"publisher": "中信出版社",
@@ -23,7 +23,7 @@
         {
 		"id": 1007,
 		"fileName": "我的大明王朝",
-		"cover": "http://192.168.3.70:8081/bookimgs/175c6d61-6afe-4863-a083-5f275c4ee207.jfif",
+		"cover": "http://124.221.107.109/bookimgs/175c6d61-6afe-4863-a083-5f275c4ee207.jfif",
 		"title": "我的大明王朝",
 		"author": "董永",
 		"publisher": "COAY.COM",
@@ -306,7 +306,7 @@
                             {
                     "id": 1002,
                     "fileName": "诡案追踪",
-                    "cover": "http://192.168.3.70:8081/bookimgs/22993667-718b-4c5d-a9c5-7fadb5fae471.jfif",
+                    "cover": "http://124.221.107.109/bookimgs/22993667-718b-4c5d-a9c5-7fadb5fae471.jfif",
                     "title": "诡案追踪",
                     "author": "贝晓",
                     "publisher": "不详",
@@ -325,7 +325,7 @@
                 },{
                     "id": 1000,
                     "fileName": "鬼吹灯（完美全集）",
-                    "cover": "http://192.168.3.70:8081/bookimgs/鬼吹灯（完美全集）.jfif",
+                    "cover": "http://124.221.107.109/bookimgs/鬼吹灯（完美全集）.jfif",
                     "title": "鬼吹灯",
                     "author": "天下霸唱",
                     "publisher": "epub掌上书苑",
@@ -352,7 +352,7 @@
                      {
                     "id": 1005,
                     "fileName": "说服力",
-                    "cover": "http://192.168.3.70:8081/bookimgs/c1d9c14a-459d-4482-a4ed-e6e164eead19.jfif",
+                    "cover": "http://124.221.107.109/bookimgs/c1d9c14a-459d-4482-a4ed-e6e164eead19.jfif",
                     "title": "说服力",
                     "author": "西奥迪尼",
                     "publisher": "COAY.COM",
@@ -371,7 +371,7 @@
                 },{
                     "id": 1001,
                     "fileName": "番茄工作法图解 v1.0",
-                    "cover": "http://192.168.3.70:8081/bookimgs/41f544d7-1490-469f-9abe-0ab4aed0c479.jfif",
+                    "cover": "http://124.221.107.109/bookimgs/41f544d7-1490-469f-9abe-0ab4aed0c479.jfif",
                     "title": "番茄工作法图解：简单易行的时间管理方法",
                     "author": "[瑞典] 诺特伯格",
                     "publisher": "epub掌上书苑",
@@ -399,7 +399,7 @@
                     {
                     "id": 1006,
                     "fileName": "围城-钱钟书",
-                    "cover": "http://192.168.3.70:8081/bookimgs/ef48e5ce-4895-4124-a7c7-ba741573686d.jfif",
+                    "cover": "http://124.221.107.109/bookimgs/ef48e5ce-4895-4124-a7c7-ba741573686d.jfif",
                     "title": "围城",
                     "author": "钱钟书",
                     "publisher": "fifth",
@@ -418,7 +418,7 @@
                 },{
                     "id": 1008,
                     "fileName": "羊皮卷",
-                    "cover": "http://192.168.3.70:8081/bookimgs/246d7968-44fc-400c-b9eb-3a8c1341afc7.jfif",
+                    "cover": "http://124.221.107.109/bookimgs/246d7968-44fc-400c-b9eb-3a8c1341afc7.jfif",
                     "title": "羊皮卷全书",
                     "author": "奥格·曼狄诺",
                     "publisher": "epub掌上书苑",
@@ -437,7 +437,7 @@
                 },{
                     "id": 1004,
                     "fileName": "米格尔街",
-                    "cover": "http://192.168.3.70:8081/bookimgs/d5f768ec-f309-4a6f-88ce-1368a236a6d0.jfif",
+                    "cover": "http://124.221.107.109/bookimgs/d5f768ec-f309-4a6f-88ce-1368a236a6d0.jfif",
                     "title": "米格尔街",
                     "author": "V.S.奈保尔",
                     "publisher": "南海出版公司",

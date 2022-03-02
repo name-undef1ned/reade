@@ -1,6 +1,6 @@
 <template>
   <div class="shelfitemimage-wraper">
-  <img :src="data.cover" >
+  <img v-lazy="data.cover" :key="data.cover">
   </div>
 </template>
 

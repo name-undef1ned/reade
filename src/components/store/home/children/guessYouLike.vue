@@ -6,7 +6,7 @@
 
     <div class="book-wraper" v-for="(item,index) in likelistshow" :key="'guesslike'+index" @click="showbookdetail(likelist[item])">
          <div class="img-wraper">
-            <img :src="likelist[item].cover"/>    
+            <img v-lazy="likelist[item].cover" :key="likelist[item].cover"/>    
          </div>
          <div class="book-describe-wraper">
            <div class="top-wraper">
